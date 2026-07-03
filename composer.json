@@ -1,0 +1,16 @@
+{
+    "name": "jer/restaurant-app",
+    "license": "BSL-1.0",
+    "autoload": {
+        "psr-4": {
+            "Jer\\RestaurantApp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "jer",
+            "email": "mjlerba@gmail.com"
+        }
+    ],
+    "require": {}
+}
