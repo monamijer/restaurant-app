@@ -11,32 +11,33 @@ class Router {
         $this->routes['POST'][$path] = $handler;
     }
 
-    public function dispatch(): void {
-        $method = $_SERVER['REQUEST_METHOD'];
-        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $basePath = '/restaurant-app/public'; // à adapter selon le déploiement alwaysdata
-        $uri = str_replace($basePath, '', $uri);
-        $uri = rtrim($uri, '/') ?: '/';
-
-        $handler = $this->routes[$method][$uri] ?? null;
-
-        if (!$handler) {
-            http_response_code(404);
-            echo "Page non trouvée";
-            return;
-        }
-
-        [$controllerName, $action] = explode('@', $handler);
-        $controllerFile = __DIR__ . "/../controllers/{$controllerName}.php";
-
-        if (!file_exists($controllerFile)) {
-            http_response_code(500);
-            echo "Contrôleur introuvable : $controllerName";
-            return;
-        }
-
-        require_once $controllerFile;
-        $controller = new $controllerName();
-        $controller->$action();
+  public function dispatch(): void {
+    $method = $_SERVER['REQUEST_METHOD'];
+    if ($method === 'HEAD') {
+        $method = 'GET';
     }
+
+    $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    $uri = rtrim($uri, '/') ?: '/';
+
+    $handler = $this->routes[$method][$uri] ?? null;
+    if (!$handler) {
+        http_response_code(404);
+        echo "Page non trouvée";
+        return;
+    }
+
+    [$controllerPath, $action] = explode('@', $handler);
+    $parts = explode('/', $controllerPath);
+    $className = end($parts);
+
+    if (!class_exists($className)) {
+        http_response_code(500);
+        echo "Classe introuvable : $className";
+        return;
+    }
+
+    $controller = new $className();
+    $controller->$action();
+}
 }
