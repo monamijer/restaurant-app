@@ -14,11 +14,16 @@ class Controller {
         require $viewFile;
     }
 
-    protected function requireRole(string $role): void {
-        if (!isset($_SESSION['role']) || $_SESSION['role'] !== $role) {
-            http_response_code(403);
-            echo "Accès refusé";
-            exit;
-        }
+   protected function requireRole(string $role): void {
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: /connexion');
+        exit;
     }
+
+    if ($_SESSION['role'] !== $role) {
+        http_response_code(403);
+        echo "Accès refusé — vous n'avez pas les droits nécessaires.";
+        exit;
+    }
+}
 }
