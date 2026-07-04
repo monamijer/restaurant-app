@@ -7,5 +7,7 @@
             "email": "mjlerba@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "stripe/stripe-php": "^20.3"
+    }
 }

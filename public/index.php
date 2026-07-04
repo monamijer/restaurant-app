@@ -1,9 +1,12 @@
 <?php
+session_start();
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Autoloader simple : charge automatiquement les classes selon leur emplacement
+require_once __DIR__ . '/../vendor/autoload.php';
+
 spl_autoload_register(function ($class) {
     $baseDirs = [
         __DIR__ . '/../app/core/',
