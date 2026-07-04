@@ -1,71 +1,49 @@
-<!DOCTYPE html>
-<html lang="fr" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion du menu - Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/css/custom.css" rel="stylesheet">
-</head>
-<body>
-<div class="container py-4">
-    <h2 class="mb-4">🍽️ Gestion du menu</h2>
+<?php $titrePage = 'Menu'; $page = 'menu'; ?>
+<?php require __DIR__ . '/../partials/header-admin.php'; ?>
 
-    <div id="alert-zone"></div>
+<h2 class="mb-4">🍽️ Gestion du menu</h2>
 
-    <button class="btn btn-accent mb-4" data-bs-toggle="modal" data-bs-target="#modalPlat" id="btn-nouveau-plat">
-        + Ajouter un plat
-    </button>
+<div id="alert-zone"></div>
 
-    <div class="table-responsive">
-        <table class="table align-middle">
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Nom</th>
-                    <th>Catégorie</th>
-                    <th>Prix</th>
-                    <th>Disponible</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="plats-table-body">
-                <?php foreach ($plats as $plat): ?>
-                <tr data-id="<?= $plat['id'] ?>">
-                    <td><img src="/assets/uploads/<?= htmlspecialchars($plat['image'] ?? 'default.jpg') ?>" width="60" height="60" style="object-fit:cover; border-radius:4px;"></td>
-                    <td><?= htmlspecialchars($plat['nom']) ?></td>
-                    <td><?= htmlspecialchars($plat['categorie_nom']) ?></td>
-                    <td><?= number_format($plat['prix'], 0, ',', ' ') ?> BIF</td>
-                    <td>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input toggle-dispo" type="checkbox" data-id="<?= $plat['id'] ?>"
-                                   <?= $plat['disponible'] ? 'checked' : '' ?>>
-                        </div>
-                    </td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary btn-editer"
-                            data-id="<?= $plat['id'] ?>"
-                            data-nom="<?= htmlspecialchars($plat['nom']) ?>"
-                            data-description="<?= htmlspecialchars($plat['description']) ?>"
-                            data-prix="<?= $plat['prix'] ?>"
-                            data-categorie="<?= $plat['categorie_id'] ?>"
-                            data-vegetarien="<?= $plat['vegetarien'] ?>"
-                            data-sansgluten="<?= $plat['sans_gluten'] ?>"
-                            data-epice="<?= $plat['epice'] ?>">
-                            Modifier
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger btn-supprimer" data-id="<?= $plat['id'] ?>">
-                            Supprimer
-                        </button>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
+<button class="btn btn-accent mb-4" data-bs-toggle="modal" data-bs-target="#modalPlat" id="btn-nouveau-plat">
+    + Ajouter un plat
+</button>
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Image</th><th>Nom</th><th>Catégorie</th><th>Prix</th><th>Disponible</th><th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="plats-table-body">
+            <?php foreach ($plats as $plat): ?>
+            <tr data-id="<?= $plat['id'] ?>">
+                <td><img src="/assets/uploads/<?= htmlspecialchars($plat['image'] ?? 'default.jpg') ?>" width="60" height="60" style="object-fit:cover; border-radius:4px;"></td>
+                <td><?= htmlspecialchars($plat['nom']) ?></td>
+                <td><?= htmlspecialchars($plat['categorie_nom']) ?></td>
+                <td><?= number_format($plat['prix'], 0, ',', ' ') ?> BIF</td>
+                <td>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input toggle-dispo" type="checkbox" data-id="<?= $plat['id'] ?>" <?= $plat['disponible'] ? 'checked' : '' ?>>
+                    </div>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary btn-editer"
+                        data-id="<?= $plat['id'] ?>" data-nom="<?= htmlspecialchars($plat['nom']) ?>"
+                        data-description="<?= htmlspecialchars($plat['description']) ?>" data-prix="<?= $plat['prix'] ?>"
+                        data-categorie="<?= $plat['categorie_id'] ?>" data-vegetarien="<?= $plat['vegetarien'] ?>"
+                        data-sansgluten="<?= $plat['sans_gluten'] ?>" data-epice="<?= $plat['epice'] ?>">
+                        Modifier
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger btn-supprimer" data-id="<?= $plat['id'] ?>">Supprimer</button>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </div>
 
-<!-- Modal Ajout/Modification -->
 <div class="modal fade" id="modalPlat" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -76,7 +54,6 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="id" id="plat-id">
-
                     <div class="mb-3">
                         <label class="form-label">Nom</label>
                         <input type="text" class="form-control" name="nom" id="plat-nom" required>
@@ -130,8 +107,5 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/assets/js/menu-admin.js"></script>
-</body>
-</html>
+<?php require __DIR__ . '/../partials/footer-admin.php'; ?>
