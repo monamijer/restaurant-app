@@ -189,3 +189,27 @@ h1, h2, h3, .font-title {
 .gallery-item:hover img {
     transform: scale(1.08);
 }
+.auth-page {
+    min-height: 100vh;
+    background-color: var(--bg-primary);
+    padding: 2rem;
+}
+.auth-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 8px 30px var(--card-shadow);
+}
+.auth-card .form-control {
+    background-color: var(--bg-primary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+.btn-filtre.active, .btn-toggle-filtre.active {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+}
