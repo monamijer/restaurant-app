@@ -37,3 +37,10 @@ $router->post('/webhook/stripe', 'StripeWebhookController@handle');
 // Admin - Réservations
 $router->get('/admin/reservations', 'admin/ReservationAdminController@index');
 $router->post('/admin/reservations/statut', 'admin/ReservationAdminController@changerStatut');
+$router->get('/admin', 'admin/DashboardController@index');
+$router->get('/admin/stats/refresh', 'admin/DashboardController@refreshStats');
+$router->get('/admin/commandes', 'admin/PlaceholderController@commandes');
+$router->get('/admin/stocks', 'admin/PlaceholderController@stocks');
+$router->get('/admin/clients', 'admin/PlaceholderController@clients');
+$router->get('/admin/avis', 'admin/PlaceholderController@avis');
+$router->get('/admin/employes', 'admin/PlaceholderController@employes');
