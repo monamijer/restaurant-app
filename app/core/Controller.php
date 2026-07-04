@@ -15,7 +15,6 @@ class Controller {
     }
 
     protected function requireRole(string $role): void {
-        session_start();
         if (!isset($_SESSION['role']) || $_SESSION['role'] !== $role) {
             http_response_code(403);
             echo "Accès refusé";
