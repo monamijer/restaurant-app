@@ -2,6 +2,8 @@
 vendor/
 vendor/*
 composer.phar
+public/assets/uploads/*
+!public/assets/uploads/.gitkeep
 
 # sensible environment variables (password, API Keys)
 .env
