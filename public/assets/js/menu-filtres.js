@@ -34,6 +34,7 @@ $(document).ready(function () {
                                     </div>
                                     <p style="color: var(--text-secondary); font-size: 0.9rem;">${plat.description}</p>
                                     <strong style="color: var(--accent);">${parseFloat(plat.prix).toLocaleString('fr-FR')} BIF</strong>
+                                    <button class="btn btn-sm btn-accent mt-2 btn-ajouter-panier" data-id="${plat.id}">Ajouter au panier</button>
                                 </div>
                             </div>
                         </div>`;
@@ -46,7 +47,6 @@ $(document).ready(function () {
         });
     }
 
-    // Filtre par catégorie (un seul actif à la fois)
     $('.btn-filtre').on('click', function () {
         $('.btn-filtre').removeClass('active');
         $(this).addClass('active');
@@ -54,7 +54,6 @@ $(document).ready(function () {
         chargerPlats();
     });
 
-    // Filtres toggle (cumulables)
     $('.btn-toggle-filtre').on('click', function () {
         $(this).toggleClass('active');
         const filtre = $(this).data('filtre');
@@ -62,5 +61,16 @@ $(document).ready(function () {
         chargerPlats();
     });
 
-    chargerPlats(); // chargement initial
+    // Délégation d'événement : fonctionne même si les boutons sont ajoutés dynamiquement après coup
+    $(document).on('click', '.btn-ajouter-panier', function () {
+        const platId = $(this).data('id');
+
+        $.post('/panier/ajouter', { plat_id: platId, quantite: 1 }, function (response) {
+            alert(response.message);
+        }, 'json').fail(function (xhr) {
+            alert('Erreur : ' + xhr.status);
+        });
+    });
+
+    chargerPlats();
 });
