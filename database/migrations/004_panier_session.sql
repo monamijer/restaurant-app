@@ -1,0 +1,2 @@
+ALTER TABLE commandes ADD COLUMN IF NOT EXISTS adresse_livraison VARCHAR(255) NULL AFTER type;
+ALTER TABLE commandes ADD COLUMN IF NOT EXISTS notes VARCHAR(255) NULL AFTER adresse_livraison;
