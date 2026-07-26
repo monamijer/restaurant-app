@@ -39,8 +39,27 @@ $router->get('/admin/reservations', 'admin/ReservationAdminController@index');
 $router->post('/admin/reservations/statut', 'admin/ReservationAdminController@changerStatut');
 $router->get('/admin', 'admin/DashboardController@index');
 $router->get('/admin/stats/refresh', 'admin/DashboardController@refreshStats');
-$router->get('/admin/commandes', 'admin/PlaceholderController@commandes');
-$router->get('/admin/stocks', 'admin/PlaceholderController@stocks');
 $router->get('/admin/clients', 'admin/PlaceholderController@clients');
 $router->get('/admin/avis', 'admin/PlaceholderController@avis');
 $router->get('/admin/employes', 'admin/PlaceholderController@employes');
+
+// Client - Commande
+$router->post('/panier/ajouter', 'client/CommandeController@ajouterPanier');
+$router->post('/panier/modifier', 'client/CommandeController@modifierPanier');
+$router->get('/panier', 'client/CommandeController@voirPanier');
+$router->post('/commande/checkout', 'client/CommandeController@checkout');
+$router->post('/commande/creer-paiement', 'client/CommandeController@creerPaiement');
+$router->get('/commande/suivi', 'client/CommandeController@suivi');
+$router->get('/commande/statut-ajax', 'client/CommandeController@statutAjax');
+
+// Admin - Commandes ()
+$router->get('/admin/commandes', 'admin/CommandeAdminController@index');
+$router->post('/admin/commandes/statut', 'admin/CommandeAdminController@changerStatut');
+$router->get('/admin/commandes/liste-ajax', 'admin/CommandeAdminController@listeAjax');
+
+// Admin -Stocks
+$router->get('/admin/stocks', 'admin/StockController@index');
+$router->post('/admin/stocks/store', 'admin/StockController@store');
+$router->post('/admin/stocks/update', 'admin/StockController@update');
+$router->post('/admin/stocks/ajuster', 'admin/StockController@ajusterStock');
+$router->post('/admin/stocks/delete', 'admin/StockController@delete');
