@@ -17,13 +17,20 @@ class StripeWebhookController extends Controller {
 
         if ($event->type === 'checkout.session.completed') {
             $session = $event->data->object;
-            $reservationId = (int) $session->metadata->reservation_id;
+            $type = $session->metadata->type ?? 'reservation'; // rétrocompatibilité
 
-            $reservationModel = new Reservation();
-            $reservationModel->update($reservationId, [
-                'statut' => 'CONFIRMEE',
-                'statut_acompte' => 'PAYE',
-            ]);
+            if ($type === 'commande') {
+                $commandeId = (int) $session->metadata->commande_id;
+                $commandeModel = new Commande();
+                $commandeModel->update($commandeId, ['statut' => 'EN_CUISINE']);
+            } else {
+                $reservationId = (int) $session->metadata->reservation_id;
+                $reservationModel = new Reservation();
+                $reservationModel->update($reservationId, [
+                    'statut' => 'CONFIRMEE',
+                    'statut_acompte' => 'PAYE',
+                ]);
+            }
         }
 
         http_response_code(200);
