@@ -55,4 +55,51 @@ class Commande extends Model {
         $stmt->execute();
         return $stmt->fetchAll();
     }
+    public function creerAvecLignes(array $donneesCommande, array $panier): int {
+    $this->db->beginTransaction();
+    try {
+        $commandeId = $this->create($donneesCommande);
+
+        $ligneModel = new LigneCommande();
+        foreach ($panier as $platId => $item) {
+            $ligneModel->create([
+                'commande_id' => $commandeId,
+                'plat_id' => $platId,
+                'quantite' => $item['quantite'],
+                'prix_unitaire' => $item['prix'],
+            ]);
+        }
+
+        $this->db->commit();
+        return $commandeId;
+    } catch (\Exception $e) {
+        $this->db->rollBack();
+        throw $e;
+    }
+}
+
+public function findAvecUser(int $id): ?array {
+    $sql = "SELECT c.*, u.nom AS user_nom, u.telephone 
+            FROM commandes c
+            JOIN users u ON c.user_id = u.id
+            WHERE c.id = ?";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$id]);
+    return $stmt->fetch() ?: null;
+}
+
+public function toutesAvecUser(?string $statut = null): array {
+    $sql = "SELECT c.*, u.nom AS user_nom, u.telephone 
+            FROM commandes c
+            JOIN users u ON c.user_id = u.id";
+    $params = [];
+    if ($statut) {
+        $sql .= " WHERE c.statut = ?";
+        $params[] = $statut;
+    }
+    $sql .= " ORDER BY c.created_at DESC";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll();
+}
 }
