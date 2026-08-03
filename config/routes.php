@@ -63,3 +63,17 @@ $router->post('/admin/stocks/store', 'admin/StockController@store');
 $router->post('/admin/stocks/update', 'admin/StockController@update');
 $router->post('/admin/stocks/ajuster', 'admin/StockController@ajusterStock');
 $router->post('/admin/stocks/delete', 'admin/StockController@delete');
+
+// Admin -Clients
+$router->get('/admin/clients', 'admin/ClientController@index');
+$router->get('/admin/clients/detail', 'admin/ClientController@detail');
+$router->get('/admin/clients/rechercher-ajax', 'admin/ClientController@rechercherAjax');
+
+// Client
+$router->get('/avis', 'client/AvisController@index');
+$router->post('/avis/ajouter', 'client/AvisController@store');
+
+// Admin
+$router->get('/admin/avis', 'admin/AvisAdminController@index');
+$router->post('/admin/avis/repondre', 'admin/AvisAdminController@repondre');
+$router->post('/admin/avis/delete', 'admin/AvisAdminController@delete');
