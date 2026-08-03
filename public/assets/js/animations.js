@@ -5,11 +5,11 @@ document.addEventListener('DOMContentLoaded', function () {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
-                observer.unobserve(entry.target); // ne s'anime qu'une fois
+                observer.unobserve(entry.target); // animate just once.
             }
         });
     }, {
-        threshold: 0.15 // se déclenche quand 15% de l'élément est visible
+        threshold: 0.15 // trigger when 15% of element is visible
     });
 
     elements.forEach(el => observer.observe(el));
