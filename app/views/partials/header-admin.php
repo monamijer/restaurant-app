@@ -9,6 +9,7 @@
     <link href="/assets/css/custom.css" rel="stylesheet">
     <link href="/assets/css/admin.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 <div id="theme-toggle" class="theme-toggle">🌙</div>
@@ -22,6 +23,7 @@
         <nav class="admin-nav">
             <a href="/admin" class="<?= ($page ?? '') === 'dashboard' ? 'active' : '' ?>">📊 Dashboard</a>
             <a href="/admin/menu" class="<?= ($page ?? '') === 'menu' ? 'active' : '' ?>">🍽️ Menu</a>
+            <a href="/admin/categories" class="<?= ($page ?? '') === 'categories' ? 'active' : '' ?>">🏷️ Catégories</a>
             <a href="/admin/reservations" class="<?= ($page ?? '') === 'reservations' ? 'active' : '' ?>">📅 Réservations</a>
             <a href="/admin/commandes" class="<?= ($page ?? '') === 'commandes' ? 'active' : '' ?>">🧾 Commandes</a>
             <a href="/admin/stocks" class="<?= ($page ?? '') === 'stocks' ? 'active' : '' ?>">📦 Stocks</a>

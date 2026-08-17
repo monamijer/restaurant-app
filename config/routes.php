@@ -77,3 +77,9 @@ $router->post('/avis/ajouter', 'client/AvisController@store');
 $router->get('/admin/avis', 'admin/AvisAdminController@index');
 $router->post('/admin/avis/repondre', 'admin/AvisAdminController@repondre');
 $router->post('/admin/avis/delete', 'admin/AvisAdminController@delete');
+
+$router->get('/admin/categories', 'admin/CategorieAdminController@index');
+$router->post('/admin/categories/store', 'admin/CategorieAdminController@store');
+$router->post('/admin/categories/update', 'admin/CategorieAdminController@update');
+$router->post('/admin/categories/delete', 'admin/CategorieAdminController@delete');
+$router->post('/admin/categories/reordonner', 'admin/CategorieAdminController@reordonner');
