@@ -38,14 +38,12 @@ class ReservationController extends Controller {
             return;
         }
 
-        // Vérifie les fermetures exceptionnelles
         $fermetureModel = new Fermeture();
         if ($fermetureModel->estFerme($dateReservation)) {
             echo json_encode(['success' => false, 'message' => 'Le restaurant est fermé à cette date.']);
             return;
         }
 
-        // Cherche une table disponible
         $tableModel = new TableResto();
         $table = $tableModel->trouverTableDisponible($dateReservation, $nbPersonnes);
 
@@ -58,7 +56,6 @@ class ReservationController extends Controller {
             return;
         }
 
-        // Calcul de l'acompte selon les paramètres configurés par le restaurant
         $parametreModel = new Parametre();
         $acompteActif = (bool) $parametreModel->get('acompte_actif', '1');
         $seuilPersonnes = (int) $parametreModel->get('nb_personnes_min_acompte', 1);
@@ -66,7 +63,7 @@ class ReservationController extends Controller {
 
         $montantAcompte = null;
         $statutInitial = 'CONFIRMEE';
-        $statutAcompte = 'PAYE'; // par défaut si pas d'acompte requis
+        $statutAcompte = 'PAYE';
 
         if ($acompteActif && $nbPersonnes >= $seuilPersonnes) {
             $montantAcompte = $montantParPersonne * $nbPersonnes;
@@ -86,7 +83,6 @@ class ReservationController extends Controller {
             'statut_acompte' => $statutAcompte,
         ]);
 
-        // Si pas d'acompte requis, réservation confirmée directement
         if (!$montantAcompte) {
             echo json_encode([
                 'success' => true,
@@ -97,7 +93,6 @@ class ReservationController extends Controller {
             return;
         }
 
-        // Sinon, on prépare le paiement Stripe
         echo json_encode([
             'success' => true,
             'acompte_requis' => true,
@@ -106,7 +101,6 @@ class ReservationController extends Controller {
         ]);
     }
 
-    // Crée une session de paiement Stripe pour l'acompte
     public function creerPaiement() {
         header('Content-Type: application/json');
         $config = require __DIR__ . '/../../../config/config.php';
@@ -128,7 +122,7 @@ class ReservationController extends Controller {
                 'payment_method_types' => ['card'],
                 'line_items' => [[
                     'price_data' => [
-                        'currency' => 'usd', // adapter selon la devise réellement utilisée par Stripe dans votre pays
+                        'currency' => 'usd',
                         'product_data' => ['name' => 'Acompte réservation - ' . $reservation['nb_personnes'] . ' personnes'],
                         'unit_amount' => $montantCentimes,
                     ],
@@ -137,15 +131,45 @@ class ReservationController extends Controller {
                 'mode' => 'payment',
                 'success_url' => 'http://restaurant.local/reservation/confirmation?id=' . $reservationId,
                 'cancel_url' => 'http://restaurant.local/reserver',
-                'metadata' => ['reservation_id' => $reservationId],
+                'metadata' => ['type' => 'reservation', 'reservation_id' => $reservationId],
             ]);
 
-            $reservationModel->update($reservationId, ['stripe_payment_id' => $session->id]);
+            $reservationModel->update($reservationId, ['stripe_payment_id' => $session->id, 'mode_paiement' => 'STRIPE']);
 
             echo json_encode(['success' => true, 'checkout_url' => $session->url]);
         } catch (\Exception $e) {
             echo json_encode(['success' => false, 'message' => 'Erreur Stripe : ' . $e->getMessage()]);
         }
+    }
+
+    public function paiementManuel() {
+        header('Content-Type: application/json');
+
+        $reservationId = (int) ($_POST['reservation_id'] ?? 0);
+        $modePaiement = $_POST['mode_paiement'] ?? '';
+        $reference = htmlspecialchars(trim($_POST['reference_paiement'] ?? ''));
+
+        if (!in_array($modePaiement, ['AIRTEL_MONEY', 'ORANGE_MONEY', 'MPESA', 'CONTACT_RESTAURANT'])) {
+            echo json_encode(['success' => false, 'message' => 'Mode de paiement invalide.']);
+            return;
+        }
+
+        $reservationModel = new Reservation();
+        $data = ['mode_paiement' => $modePaiement];
+
+        if ($modePaiement === 'CONTACT_RESTAURANT') {
+            $data['statut_acompte'] = 'EN_ATTENTE';
+        } else {
+            if (!$reference) {
+                echo json_encode(['success' => false, 'message' => 'Référence de transaction requise.']);
+                return;
+            }
+            $data['reference_paiement'] = $reference;
+            $data['statut_acompte'] = 'VERIFICATION_MANUELLE';
+        }
+
+        $reservationModel->update($reservationId, $data);
+        echo json_encode(['success' => true, 'message' => 'Enregistré.']);
     }
 
     public function confirmation() {

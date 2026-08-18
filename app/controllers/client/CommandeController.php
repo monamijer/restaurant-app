@@ -2,7 +2,6 @@
 
 class CommandeController extends Controller {
 
-    // Ajout d'un plat au panier (AJAX)
     public function ajouterPanier() {
         header('Content-Type: application/json');
 
@@ -61,7 +60,10 @@ class CommandeController extends Controller {
         }
 
         $panier = $this->calculerPanier();
-        $this->render('client/panier', ['panier' => $panier]);
+        $parametreModel = new Parametre();
+        $params = $parametreModel->getAll();
+
+        $this->render('client/panier', ['panier' => $panier, 'params' => $params]);
     }
 
     public function checkout() {
@@ -102,11 +104,12 @@ class CommandeController extends Controller {
             'total' => $total,
             'adresse_livraison' => $adresse ?: null,
             'notes' => $notes ?: null,
+            'statut_paiement' => $type === 'SUR_PLACE' ? 'NON_REQUIS' : 'EN_ATTENTE',
         ], $_SESSION['panier']);
 
-        // Sur place : paiement à table, pas de Stripe nécessaire
+        unset($_SESSION['panier']);
+
         if ($type === 'SUR_PLACE') {
-            unset($_SESSION['panier']);
             echo json_encode([
                 'success' => true,
                 'paiement_requis' => false,
@@ -115,7 +118,6 @@ class CommandeController extends Controller {
             return;
         }
 
-        // Emporter/Livraison : paiement en ligne obligatoire
         echo json_encode([
             'success' => true,
             'paiement_requis' => true,
@@ -156,11 +158,41 @@ class CommandeController extends Controller {
                 'metadata' => ['type' => 'commande', 'commande_id' => $commandeId],
             ]);
 
-            $commandeModel->update($commandeId, ['stripe_id' => $session->id]);
+            $commandeModel->update($commandeId, ['stripe_id' => $session->id, 'mode_paiement' => 'STRIPE', 'statut_paiement' => 'EN_ATTENTE']);
             echo json_encode(['success' => true, 'checkout_url' => $session->url]);
         } catch (\Exception $e) {
             echo json_encode(['success' => false, 'message' => 'Erreur Stripe : ' . $e->getMessage()]);
         }
+    }
+
+    public function paiementManuel() {
+        header('Content-Type: application/json');
+
+        $commandeId = (int) ($_POST['commande_id'] ?? 0);
+        $modePaiement = $_POST['mode_paiement'] ?? '';
+        $reference = htmlspecialchars(trim($_POST['reference_paiement'] ?? ''));
+
+        if (!in_array($modePaiement, ['AIRTEL_MONEY', 'ORANGE_MONEY', 'MPESA', 'CONTACT_RESTAURANT'])) {
+            echo json_encode(['success' => false, 'message' => 'Mode de paiement invalide.']);
+            return;
+        }
+
+        $commandeModel = new Commande();
+        $data = ['mode_paiement' => $modePaiement];
+
+        if ($modePaiement === 'CONTACT_RESTAURANT') {
+            $data['statut_paiement'] = 'EN_ATTENTE';
+        } else {
+            if (!$reference) {
+                echo json_encode(['success' => false, 'message' => 'Référence de transaction requise.']);
+                return;
+            }
+            $data['reference_paiement'] = $reference;
+            $data['statut_paiement'] = 'VERIFICATION_MANUELLE';
+        }
+
+        $commandeModel->update($commandeId, $data);
+        echo json_encode(['success' => true, 'message' => 'Enregistré.']);
     }
 
     public function suivi() {
@@ -168,14 +200,9 @@ class CommandeController extends Controller {
         $commandeModel = new Commande();
         $commande = $commandeModel->find($id);
 
-        if ($commande) {
-            unset($_SESSION['panier']); // vidé une fois la commande finalisée
-        }
-
         $this->render('client/suivi-commande', ['commande' => $commande]);
     }
 
-    // Endpoint AJAX de polling pour le suivi en temps réel
     public function statutAjax() {
         header('Content-Type: application/json');
         $id = (int) ($_GET['id'] ?? 0);

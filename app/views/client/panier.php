@@ -55,5 +55,12 @@
     <?php endif; ?>
 </div>
 
+<script>
+    const parametresPaiement = <?= json_encode($params) ?>;
+</script>
 <script src="/assets/js/panier.js"></script>
+
+<?php require __DIR__ . '/../partials/choix-paiement.php'; ?>
+<script src="/assets/js/choix-paiement.js"></script>
+
 <?php require __DIR__ . '/../partials/footer-client.php'; ?>
