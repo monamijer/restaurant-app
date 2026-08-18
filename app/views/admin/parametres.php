@@ -42,6 +42,28 @@
         </div>
     </div>
 
+    <div class="card mb-3">
+        <div class="card-header">Moyens de paiement mobile</div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label class="form-label">Téléphone de contact</label>
+                <input type="text" class="form-control" name="telephone_contact" value="<?= htmlspecialchars($params['telephone_contact'] ?? '') ?>">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Numéro Airtel Money</label>
+                <input type="text" class="form-control" name="numero_airtel_money" value="<?= htmlspecialchars($params['numero_airtel_money'] ?? '') ?>">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Numéro Orange Money</label>
+                <input type="text" class="form-control" name="numero_orange_money" value="<?= htmlspecialchars($params['numero_orange_money'] ?? '') ?>">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Numéro M-Pesa</label>
+                <input type="text" class="form-control" name="numero_mpesa" value="<?= htmlspecialchars($params['numero_mpesa'] ?? '') ?>">
+            </div>
+        </div>
+    </div>
+
     <button type="submit" class="btn btn-primary">Enregistrer les paramètres</button>
 </form>
 

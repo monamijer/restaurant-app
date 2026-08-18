@@ -5,7 +5,7 @@ require_once __DIR__ . '/../../models/Parametre.php';
 class ParametresController extends Controller {
 
     public function index() {
-        $this->requireRole('ADMIN'); // sécurité : admin uniquement
+        $this->requireRole('ADMIN');
 
         $parametreModel = new Parametre();
         $params = $parametreModel->getAll();
@@ -23,7 +23,6 @@ class ParametresController extends Controller {
 
         $parametreModel = new Parametre();
 
-        // On ne prend que les champs attendus (sécurité)
         $champsAutorises = [
             'nb_personnes_min_acompte',
             'montant_acompte_par_personne',
@@ -32,18 +31,23 @@ class ParametresController extends Controller {
             'nom_restaurant',
             'email_contact',
             'acompte_actif',
+            'telephone_contact',
+            'numero_airtel_money',
+            'numero_orange_money',
+            'numero_mpesa',
         ];
 
         $data = [];
         foreach ($champsAutorises as $champ) {
             if (isset($_POST[$champ])) {
                 $data[$champ] = htmlspecialchars(trim($_POST[$champ]));
+            } elseif ($champ === 'acompte_actif') {
+                $data[$champ] = '0';
             }
         }
 
         $parametreModel->setMultiple($data);
 
-        // Réponse AJAX en JSON
         header('Content-Type: application/json');
         echo json_encode(['success' => true, 'message' => 'Paramètres enregistrés']);
     }
