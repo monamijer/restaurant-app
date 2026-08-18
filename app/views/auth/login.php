@@ -21,9 +21,9 @@
             <button type="submit" class="btn btn-accent w-100">Se connecter</button>
         </form>
 
-        <p class="text-center mt-3" style="color: var(--text-secondary);">
+        <!-- <p class="text-center mt-3" style="color: var(--text-secondary);">
             Pas encore de compte ? <a href="/inscription" style="color: var(--accent);">Créer un compte</a>
-        </p>
+        </p> -->
     </div>
 </div>
 

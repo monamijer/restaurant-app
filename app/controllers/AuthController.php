@@ -19,9 +19,14 @@ class AuthController extends Controller {
         }
 
         if (Auth::attempt($email, $password)) {
-            header('Location: ' . (Auth::role() === 'ADMIN' ? '/admin' : '/'));
-            exit;
-        }
+    $destinations = [
+        'ADMIN' => '/admin',
+        'SERVEUR' => '/admin/reservations',
+        'CUISINE' => '/admin/commandes',
+    ];
+    header('Location: ' . ($destinations[Auth::role()] ?? '/'));
+    exit;
+}
 
         $_SESSION['error'] = "Email ou mot de passe incorrect.";
         header('Location: /connexion');
