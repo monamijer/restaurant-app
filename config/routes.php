@@ -27,8 +27,8 @@ $router->post('/webhook/stripe', 'StripeWebhookController@handle');
 
 $router->get('/connexion', 'AuthController@loginForm');
 $router->post('/connexion', 'AuthController@login');
-$router->get('/inscription', 'AuthController@registerForm');
-$router->post('/inscription', 'AuthController@register');
+// $router->get('/inscription', 'AuthController@registerForm');
+// $router->post('/inscription', 'AuthController@register');
 $router->get('/deconnexion', 'AuthController@logout');
 
 $router->get('/admin', 'admin/DashboardController@index');
@@ -76,3 +76,6 @@ $router->post('/admin/employes/delete', 'admin/EmployeController@delete');
 
 $router->get('/admin/parametres', 'admin/ParametresController@index');
 $router->post('/admin/parametres/update', 'admin/ParametresController@update');
+
+$router->post('/verification/envoyer', 'VerificationController@envoyer');
+$router->post('/verification/verifier', 'VerificationController@verifier');
