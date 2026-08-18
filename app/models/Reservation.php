@@ -7,30 +7,38 @@ class Reservation extends Model {
         return $this->create($data);
     }
 
-    public function findAvecDetails(int $id): ?array {
-        $sql = "SELECT r.*, u.nom AS user_nom, u.email, u.telephone, u.nb_no_show
-                FROM reservations r
-                JOIN users u ON r.user_id = u.id
-                WHERE r.id = ?";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$id]);
-        return $stmt->fetch() ?: null;
-    }
+  public function findAvecDetails(int $id): ?array {
+    $sql = "SELECT r.*, 
+                COALESCE(u.nom, r.guest_nom) AS user_nom,
+                COALESCE(u.email, r.guest_email) AS email,
+                COALESCE(u.telephone, r.guest_telephone) AS telephone,
+                u.nb_no_show
+            FROM reservations r
+            LEFT JOIN users u ON r.user_id = u.id
+            WHERE r.id = ?";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$id]);
+    return $stmt->fetch() ?: null;
+}
 
-    public function toutesAvecDetails(?string $statut = null): array {
-        $sql = "SELECT r.*, u.nom AS user_nom, u.email, u.telephone, u.nb_no_show
-                FROM reservations r
-                JOIN users u ON r.user_id = u.id";
-        $params = [];
-        if ($statut) {
-            $sql .= " WHERE r.statut = ?";
-            $params[] = $statut;
-        }
-        $sql .= " ORDER BY r.date_reservation ASC";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute($params);
-        return $stmt->fetchAll();
+ public function toutesAvecDetails(?string $statut = null): array {
+    $sql = "SELECT r.*, 
+                COALESCE(u.nom, r.guest_nom) AS user_nom,
+                COALESCE(u.email, r.guest_email) AS email,
+                COALESCE(u.telephone, r.guest_telephone) AS telephone,
+                u.nb_no_show
+            FROM reservations r
+            LEFT JOIN users u ON r.user_id = u.id";
+    $params = [];
+    if ($statut) {
+        $sql .= " WHERE r.statut = ?";
+        $params[] = $statut;
     }
+    $sql .= " ORDER BY r.date_reservation ASC";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll();
+}
 
     public function marquerNoShow(int $id): void {
         $this->update($id, ['statut' => 'NO_SHOW', 'statut_acompte' => 'RETENU']);

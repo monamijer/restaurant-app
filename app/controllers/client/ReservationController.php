@@ -3,11 +3,6 @@
 class ReservationController extends Controller {
 
     public function index() {
-        if (!Auth::check()) {
-            header('Location: /connexion');
-            exit;
-        }
-
         $parametreModel = new Parametre();
         $params = $parametreModel->getAll();
 
@@ -15,19 +10,30 @@ class ReservationController extends Controller {
     }
 
     public function store() {
-        if (!Auth::check()) {
-            header('Location: /connexion');
-            exit;
-        }
         header('Content-Type: application/json');
 
+        $nom = trim($_POST['nom'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $telephone = trim($_POST['telephone'] ?? '');
         $date = $_POST['date'] ?? '';
         $heure = $_POST['heure'] ?? '';
         $nbPersonnes = (int) ($_POST['nb_personnes'] ?? 0);
         $notes = htmlspecialchars(trim($_POST['notes'] ?? ''));
 
-        if (!$date || !$heure || $nbPersonnes < 1) {
+        if (!$nom || !$email || !$date || !$heure || $nbPersonnes < 1) {
             echo json_encode(['success' => false, 'message' => 'Veuillez remplir tous les champs.']);
+            return;
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo json_encode(['success' => false, 'message' => 'Email invalide.']);
+            return;
+        }
+
+        // Sécurité serveur : l'email doit avoir été vérifié il y a moins de 30 minutes
+        $verifModel = new VerificationEmail();
+        if (!$verifModel->estRecemmentVerifie($email, 'RESERVATION')) {
+            echo json_encode(['success' => false, 'message' => 'Veuillez vérifier votre email avant de continuer.']);
             return;
         }
 
@@ -73,7 +79,10 @@ class ReservationController extends Controller {
 
         $reservationModel = new Reservation();
         $reservationId = $reservationModel->create([
-            'user_id' => Auth::user()['id'],
+            'user_id' => null,
+            'guest_nom' => htmlspecialchars($nom),
+            'guest_email' => $email,
+            'guest_telephone' => htmlspecialchars($telephone),
             'table_id' => $table['id'],
             'date_reservation' => $dateReservation,
             'nb_personnes' => $nbPersonnes,
@@ -135,7 +144,6 @@ class ReservationController extends Controller {
             ]);
 
             $reservationModel->update($reservationId, ['stripe_payment_id' => $session->id, 'mode_paiement' => 'STRIPE']);
-
             echo json_encode(['success' => true, 'checkout_url' => $session->url]);
         } catch (\Exception $e) {
             echo json_encode(['success' => false, 'message' => 'Erreur Stripe : ' . $e->getMessage()]);
@@ -169,6 +177,25 @@ class ReservationController extends Controller {
         }
 
         $reservationModel->update($reservationId, $data);
+
+        $reservation = $reservationModel->find($reservationId);
+        $parametreModel = new Parametre();
+        $emailAdmin = $parametreModel->get('email_contact');
+
+        Mailer::notifierAdminPaiementManuel('Réservation #' . $reservationId, [
+            'nom' => $reservation['guest_nom'],
+            'telephone' => $reservation['guest_telephone'] ?? 'non renseigné',
+            'mode_paiement' => $modePaiement,
+            'reference' => $reference,
+            'description' => $reservation['nb_personnes'] . ' personnes le ' . date('d/m/Y à H:i', strtotime($reservation['date_reservation'])),
+        ], $emailAdmin);
+
+        $messageClient = $modePaiement === 'CONTACT_RESTAURANT'
+            ? 'Votre demande de réservation a été reçue. Nous allons vous contacter prochainement pour convenir du paiement.'
+            : 'Votre réservation a été reçue et votre paiement est en cours de vérification. Vous recevrez une confirmation sous peu.';
+
+        Mailer::confirmerDemandeClient($reservation['guest_email'], $reservation['guest_nom'], 'Votre demande de réservation', $messageClient);
+
         echo json_encode(['success' => true, 'message' => 'Enregistré.']);
     }
 

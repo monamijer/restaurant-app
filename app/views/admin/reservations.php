@@ -41,7 +41,7 @@
                         <?php if (!empty($r['mode_paiement'])): ?>
                             <small><?= $r['mode_paiement'] ?><?= $r['reference_paiement'] ? ' — Réf: ' . htmlspecialchars($r['reference_paiement']) : '' ?></small><br>
                         <?php endif; ?>
-                        <?= number_format($r['montant_acompte'], 0, ',', ' ') ?> BIF
+                        <?= number_format($r['montant_acompte'], 0, ',', ' ') ?> <?= htmlspecialchars($devise) ?>
                         <br><span class="badge bg-<?= $r['statut_acompte'] === 'PAYE' ? 'success' : ($r['statut_acompte'] === 'VERIFICATION_MANUELLE' ? 'warning' : ($r['statut_acompte'] === 'RETENU' ? 'danger' : 'secondary')) ?>">
                             <?= $r['statut_acompte'] ?>
                         </span>
@@ -56,7 +56,7 @@
                     <span class="badge badge-statut badge-<?= strtolower($r['statut']) ?>"><?= str_replace('_', ' ', $r['statut']) ?></span>
                 </td>
                 <td>
-                    <?php if ($r['nb_no_show'] > 0): ?>
+                    <?php if (($r['nb_no_show'] ?? 0) > 0): ?>
                         <span class="badge bg-danger"><?= $r['nb_no_show'] ?> fois</span>
                     <?php else: ?>
                         <span style="color: var(--text-secondary);">0</span>

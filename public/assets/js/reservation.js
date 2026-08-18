@@ -1,6 +1,21 @@
 $(document).ready(function () {
+  let emailConfirme = null;
+
+  VerificationEmail.init("RESERVATION", function (email) {
+    emailConfirme = email;
+    $("#btn-soumettre-reservation").prop("disabled", false).text("Réserver");
+  });
+
   $("#form-reservation").on("submit", function (e) {
     e.preventDefault();
+
+    if (!emailConfirme) {
+      afficherAlerte(
+        "danger",
+        "Veuillez vérifier votre email avant de continuer.",
+      );
+      return;
+    }
 
     $.ajax({
       url: "/reserver",
@@ -24,7 +39,6 @@ $(document).ready(function () {
           return;
         }
 
-        // Acompte requis : ouvre le choix du mode de paiement
         PaiementModal.ouvrir({
           type: "reservation",
           id: response.reservation_id,
