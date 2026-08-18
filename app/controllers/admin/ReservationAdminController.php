@@ -3,12 +3,12 @@
 class ReservationAdminController extends Controller {
 
     public function index() {
-        $this->requireRole('ADMIN');
+       $this->requireAnyRole(['ADMIN', 'SERVEUR']);
 
         $reservationModel = new Reservation();
         $reservations = $reservationModel->toutesAvecDetails();
-
-        $this->render('admin/reservations', ['reservations' => $reservations]);
+$parametreModel = new Parametre();
+$this->render('admin/reservations', ['reservations' => $reservations, 'devise' => $parametreModel->get('devise', 'BIF')]);
     }
 
     public function changerStatut() {

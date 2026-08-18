@@ -3,7 +3,7 @@
 class CommandeAdminController extends Controller {
 
     public function index() {
-        $this->requireRole('ADMIN');
+        $this->requireAnyRole(['ADMIN', 'SERVEUR', 'CUISINE']);
 
         $commandeModel = new Commande();
         $ligneModel = new LigneCommande();
@@ -13,7 +13,8 @@ class CommandeAdminController extends Controller {
             $commande['lignes'] = $ligneModel->parCommande($commande['id']);
         }
 
-        $this->render('admin/commandes', ['commandes' => $commandes]);
+        $parametreModel = new Parametre();
+        $this->render('admin/commandes', ['commandes' => $commandes, 'devise' => $parametreModel->get('devise', 'BIF')]);
     }
 
     public function changerStatut() {

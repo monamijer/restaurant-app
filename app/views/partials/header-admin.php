@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/assets/css/custom.css" rel="stylesheet">
     <link href="/assets/css/admin.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
@@ -20,19 +21,31 @@
             <span class="font-title">Etoile d'Or</span>
             <small style="color: var(--text-secondary);">Espace admin</small>
         </div>
-        <nav class="admin-nav">
-            <a href="/admin" class="<?= ($page ?? '') === 'dashboard' ? 'active' : '' ?>">📊 Dashboard</a>
-            <a href="/admin/menu" class="<?= ($page ?? '') === 'menu' ? 'active' : '' ?>">🍽️ Menu</a>
-            <a href="/admin/categories" class="<?= ($page ?? '') === 'categories' ? 'active' : '' ?>">🏷️ Catégories</a>
-            <a href="/admin/reservations" class="<?= ($page ?? '') === 'reservations' ? 'active' : '' ?>">📅 Réservations</a>
-            <a href="/admin/commandes" class="<?= ($page ?? '') === 'commandes' ? 'active' : '' ?>">🧾 Commandes</a>
-            <a href="/admin/stocks" class="<?= ($page ?? '') === 'stocks' ? 'active' : '' ?>">📦 Stocks</a>
-            <a href="/admin/clients" class="<?= ($page ?? '') === 'clients' ? 'active' : '' ?>">👤 Clients</a>
-            <a href="/admin/avis" class="<?= ($page ?? '') === 'avis' ? 'active' : '' ?>">⭐ Avis</a>
-            <a href="/admin/employes" class="<?= ($page ?? '') === 'employes' ? 'active' : '' ?>">👥 Employés</a>
-            <a href="/admin/parametres" class="<?= ($page ?? '') === 'parametres' ? 'active' : '' ?>">⚙️ Paramètres</a>
-            <a href="/deconnexion" class="text-danger">🚪 Déconnexion</a>
-        </nav>
+       <nav class="admin-nav">
+    <?php if (Auth::role() === 'ADMIN'): ?>
+        <a href="/admin" class="<?= ($page ?? '') === 'dashboard' ? 'active' : '' ?>">📊 Dashboard</a>
+        <a href="/admin/menu" class="<?= ($page ?? '') === 'menu' ? 'active' : '' ?>">🍽️ Menu</a>
+        <a href="/admin/categories" class="<?= ($page ?? '') === 'categories' ? 'active' : '' ?>">🏷️ Catégories</a>
+    <?php endif; ?>
+
+    <?php if (in_array(Auth::role(), ['ADMIN', 'SERVEUR'])): ?>
+        <a href="/admin/reservations" class="<?= ($page ?? '') === 'reservations' ? 'active' : '' ?>">📅 Réservations</a>
+    <?php endif; ?>
+
+    <?php if (in_array(Auth::role(), ['ADMIN', 'SERVEUR', 'CUISINE'])): ?>
+        <a href="/admin/commandes" class="<?= ($page ?? '') === 'commandes' ? 'active' : '' ?>">🧾 Commandes</a>
+    <?php endif; ?>
+
+    <?php if (Auth::role() === 'ADMIN'): ?>
+        <a href="/admin/stocks" class="<?= ($page ?? '') === 'stocks' ? 'active' : '' ?>">📦 Stocks</a>
+        <a href="/admin/clients" class="<?= ($page ?? '') === 'clients' ? 'active' : '' ?>">👤 Clients</a>
+        <a href="/admin/avis" class="<?= ($page ?? '') === 'avis' ? 'active' : '' ?>">⭐ Avis</a>
+        <a href="/admin/employes" class="<?= ($page ?? '') === 'employes' ? 'active' : '' ?>">👥 Employés</a>
+        <a href="/admin/parametres" class="<?= ($page ?? '') === 'parametres' ? 'active' : '' ?>">⚙️ Paramètres</a>
+    <?php endif; ?>
+
+    <a href="/deconnexion" class="text-danger">🚪 Déconnexion</a>
+</nav>
     </aside>
 
     <main class="admin-content">
