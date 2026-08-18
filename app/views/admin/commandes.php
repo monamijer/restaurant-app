@@ -21,6 +21,18 @@
             </ul>
             <strong><?= number_format($c['total'], 0, ',', ' ') ?> BIF</strong>
 
+            <?php if (!empty($c['mode_paiement'])): ?>
+                <p class="mt-2 mb-1">
+                    <small><?= $c['mode_paiement'] ?><?= $c['reference_paiement'] ? ' — Réf: ' . htmlspecialchars($c['reference_paiement']) : '' ?></small><br>
+                    <span class="badge bg-<?= $c['statut_paiement'] === 'PAYE' ? 'success' : ($c['statut_paiement'] === 'VERIFICATION_MANUELLE' ? 'warning' : 'secondary') ?>">
+                        <?= $c['statut_paiement'] ?>
+                    </span>
+                </p>
+                <?php if (in_array($c['statut_paiement'], ['VERIFICATION_MANUELLE', 'EN_ATTENTE'])): ?>
+                    <button class="btn btn-sm btn-success mb-2 btn-confirmer-paiement-commande" data-id="<?= $c['id'] ?>">✅ Paiement reçu</button>
+                <?php endif; ?>
+            <?php endif; ?>
+
             <select class="form-select form-select-sm mt-2 select-statut-commande" data-id="<?= $c['id'] ?>">
                 <option value="EN_ATTENTE" <?= $c['statut'] === 'EN_ATTENTE' ? 'selected' : '' ?>>En attente</option>
                 <option value="EN_CUISINE" <?= $c['statut'] === 'EN_CUISINE' ? 'selected' : '' ?>>En cuisine</option>

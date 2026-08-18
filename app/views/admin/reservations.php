@@ -38,10 +38,16 @@
                 <td><?= $r['nb_personnes'] ?></td>
                 <td>
                     <?php if ($r['montant_acompte']): ?>
+                        <?php if (!empty($r['mode_paiement'])): ?>
+                            <small><?= $r['mode_paiement'] ?><?= $r['reference_paiement'] ? ' — Réf: ' . htmlspecialchars($r['reference_paiement']) : '' ?></small><br>
+                        <?php endif; ?>
                         <?= number_format($r['montant_acompte'], 0, ',', ' ') ?> BIF
-                        <br><span class="badge bg-<?= $r['statut_acompte'] === 'PAYE' ? 'success' : ($r['statut_acompte'] === 'RETENU' ? 'danger' : 'warning') ?>">
+                        <br><span class="badge bg-<?= $r['statut_acompte'] === 'PAYE' ? 'success' : ($r['statut_acompte'] === 'VERIFICATION_MANUELLE' ? 'warning' : ($r['statut_acompte'] === 'RETENU' ? 'danger' : 'secondary')) ?>">
                             <?= $r['statut_acompte'] ?>
                         </span>
+                        <?php if (in_array($r['statut_acompte'], ['VERIFICATION_MANUELLE', 'EN_ATTENTE'])): ?>
+                            <br><button class="btn btn-sm btn-success mt-1 btn-confirmer-paiement" data-id="<?= $r['id'] ?>">✅ Paiement reçu</button>
+                        <?php endif; ?>
                     <?php else: ?>
                         <span style="color: var(--text-secondary);">Aucun</span>
                     <?php endif; ?>

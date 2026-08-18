@@ -35,7 +35,17 @@ class CommandeAdminController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Statut mis à jour.']);
     }
 
-    // Endpoint AJAX pour rafraîchir l'écran cuisine sans recharger
+    public function confirmerPaiement() {
+        $this->requireRole('ADMIN');
+        header('Content-Type: application/json');
+
+        $id = (int) ($_POST['id'] ?? 0);
+        $commandeModel = new Commande();
+        $commandeModel->update($id, ['statut_paiement' => 'PAYE']);
+
+        echo json_encode(['success' => true, 'message' => 'Paiement confirmé.']);
+    }
+
     public function listeAjax() {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');

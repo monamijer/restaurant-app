@@ -34,4 +34,15 @@ class ReservationAdminController extends Controller {
 
         echo json_encode(['success' => true, 'message' => 'Statut mis à jour.']);
     }
+
+    public function confirmerPaiement() {
+        $this->requireRole('ADMIN');
+        header('Content-Type: application/json');
+
+        $id = (int) ($_POST['id'] ?? 0);
+        $reservationModel = new Reservation();
+        $reservationModel->update($id, ['statut_acompte' => 'PAYE', 'statut' => 'CONFIRMEE']);
+
+        echo json_encode(['success' => true, 'message' => 'Paiement confirmé.']);
+    }
 }
