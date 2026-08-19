@@ -8,34 +8,35 @@
         <p><?= $noteMoyenne ?> ⭐ sur <?= count($avis) ?> avis</p>
     </div>
 
-    <?php if (Auth::check()): ?>
     <div class="stat-card mb-4 p-4" id="form-avis-container">
-        <h5 class="mb-3">Laisser un avis</h5>
-        <div id="alert-zone"></div>
-        <form id="form-avis">
-            <div class="mb-3">
-                <label class="form-label">Votre note</label>
-                <div class="etoiles-select" id="etoiles-select">
-                    <span data-valeur="1">⭐</span>
-                    <span data-valeur="2">⭐</span>
-                    <span data-valeur="3">⭐</span>
-                    <span data-valeur="4">⭐</span>
-                    <span data-valeur="5">⭐</span>
-                </div>
-                <input type="hidden" name="note" id="note-selectionnee" value="0">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Votre commentaire</label>
-                <textarea class="form-control" name="commentaire" rows="3" minlength="10" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-accent">Publier mon avis</button>
-        </form>
-    </div>
-    <?php else: ?>
-        <div class="alert alert-info">
-            <a href="/connexion">Connectez-vous</a> pour laisser un avis.
+    <h5 class="mb-3">Laisser un avis</h5>
+    <div id="alert-zone"></div>
+    <form id="form-avis">
+        <div class="mb-3">
+            <label class="form-label">Votre nom</label>
+            <input type="text" class="form-control" name="nom" required>
         </div>
-    <?php endif; ?>
+
+        <?php require __DIR__ . '/../partials/verification-email.php'; ?>
+
+        <div class="mb-3">
+            <label class="form-label">Votre note</label>
+            <div class="etoiles-select" id="etoiles-select">
+                <span data-valeur="1">⭐</span>
+                <span data-valeur="2">⭐</span>
+                <span data-valeur="3">⭐</span>
+                <span data-valeur="4">⭐</span>
+                <span data-valeur="5">⭐</span>
+            </div>
+            <input type="hidden" name="note" id="note-selectionnee" value="0">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Votre commentaire</label>
+            <textarea class="form-control" name="commentaire" rows="3" minlength="10" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-accent" id="btn-soumettre-avis" disabled>Vérifiez d'abord votre email</button>
+    </form>
+</div>
 
     <div id="avis-liste">
         <?php foreach ($avis as $a): ?>
@@ -67,5 +68,6 @@
 .etoiles-select span.active { opacity: 1; }
 </style>
 
+<script src="/assets/js/verification-email.js"></script>
 <script src="/assets/js/avis-client.js"></script>
 <?php require __DIR__ . '/../partials/footer-client.php'; ?>

@@ -36,6 +36,17 @@
     <form id="form-checkout" class="mt-4">
         <div class="mb-3">
             <label class="form-label">Type de commande</label>
+            <div class="mb-3">
+    <label class="form-label">Nom complet</label>
+    <input type="text" class="form-control" name="nom" required>
+</div>
+
+<?php require __DIR__ . '/../partials/verification-email.php'; ?>
+
+<div class="mb-3">
+    <label class="form-label">Téléphone</label>
+    <input type="tel" class="form-control" name="telephone" autocomplete="off">
+</div>
             <select class="form-control" name="type" id="type-commande" required>
                 <option value="SUR_PLACE">Sur place</option>
                 <option value="EMPORTER">À emporter</option>
@@ -50,7 +61,9 @@
             <label class="form-label">Notes (optionnel)</label>
             <textarea class="form-control" name="notes" rows="2"></textarea>
         </div>
-        <button type="submit" class="btn btn-accent w-100">Valider la commande</button>
+        <button type="submit" class="btn btn-accent w-100" id="btn-soumettre-commande" disabled>
+    Vérifiez d'abord votre email
+</button>
     </form>
     <?php endif; ?>
 </div>
@@ -58,6 +71,7 @@
 <script>
     const parametresPaiement = <?= json_encode($params) ?>;
 </script>
+<script src="/assets/js/verification-email.js"></script>
 <script src="/assets/js/panier.js"></script>
 
 <?php require __DIR__ . '/../partials/choix-paiement.php'; ?>

@@ -17,7 +17,6 @@
                 <th>Réservations</th>
                 <th>Commandes</th>
                 <th>Total dépensé</th>
-                <th>No-show</th>
                 <th></th>
             </tr>
         </thead>
@@ -30,14 +29,8 @@
                 <td><?= $c['nb_reservations'] ?></td>
                 <td><?= $c['nb_commandes'] ?></td>
                 <td><strong><?= number_format($c['total_depense'], 0, ',', ' ') ?> <?= htmlspecialchars($devise) ?></strong></td>
-                <td>
-                    <?php if ($c['nb_no_show'] > 0): ?>
-                        <span class="badge bg-danger"><?= $c['nb_no_show'] ?></span>
-                    <?php else: ?>
-                        <span style="color: var(--text-secondary);">0</span>
-                    <?php endif; ?>
-                </td>
-                <td><a href="/admin/clients/detail?id=<?= $c['id'] ?>" class="btn btn-sm btn-outline-primary">Voir</a></td>
+                
+                <td><a href="/admin/clients/detail?email=<?= urlencode($c['email']) ?>" class="btn btn-sm btn-outline-primary">Voir</a></td>
             </tr>
             <?php endforeach; ?>
         </tbody>
@@ -49,5 +42,4 @@
 </div>
 
 <script>window.deviseActuelle = <?= json_encode($devise) ?>;</script>
-<script src="/assets/js/clients-admin.js"></script>
 <?php require __DIR__ . '/../partials/footer-admin.php'; ?>

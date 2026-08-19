@@ -79,9 +79,12 @@ class Commande extends Model {
 }
 
 public function findAvecUser(int $id): ?array {
-    $sql = "SELECT c.*, u.nom AS user_nom, u.telephone 
+    $sql = "SELECT c.*, 
+                COALESCE(u.nom, c.guest_nom) AS user_nom,
+                COALESCE(u.email, c.guest_email) AS email,
+                COALESCE(u.telephone, c.guest_telephone) AS telephone
             FROM commandes c
-            JOIN users u ON c.user_id = u.id
+            LEFT JOIN users u ON c.user_id = u.id
             WHERE c.id = ?";
     $stmt = $this->db->prepare($sql);
     $stmt->execute([$id]);
@@ -89,15 +92,50 @@ public function findAvecUser(int $id): ?array {
 }
 
 public function toutesAvecUser(?string $statut = null): array {
-    $sql = "SELECT c.*, u.nom AS user_nom, u.telephone 
+    $sql = "SELECT c.*, 
+                COALESCE(u.nom, c.guest_nom) AS user_nom,
+                COALESCE(u.email, c.guest_email) AS email,
+                COALESCE(u.telephone, c.guest_telephone) AS telephone
             FROM commandes c
-            JOIN users u ON c.user_id = u.id";
+            LEFT JOIN users u ON c.user_id = u.id";
     $params = [];
     if ($statut) {
         $sql .= " WHERE c.statut = ?";
         $params[] = $statut;
     }
     $sql .= " ORDER BY c.created_at DESC";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll();
+}
+public function journalDuJour(?int $userId = null): array {
+    $sql = "SELECT c.*, u.nom AS saisie_par_nom
+            FROM commandes c
+            LEFT JOIN users u ON c.saisie_par_user_id = u.id
+            WHERE c.saisie_par_user_id IS NOT NULL
+            AND DATE(c.created_at) = CURDATE()";
+    $params = [];
+    if ($userId) {
+        $sql .= " AND c.saisie_par_user_id = ?";
+        $params[] = $userId;
+    }
+    $sql .= " ORDER BY c.created_at DESC";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll();
+}
+
+public function totalParModePaiementJour(?int $userId = null): array {
+    $sql = "SELECT mode_paiement, COALESCE(SUM(total), 0) AS total
+            FROM commandes
+            WHERE saisie_par_user_id IS NOT NULL
+            AND DATE(created_at) = CURDATE()";
+    $params = [];
+    if ($userId) {
+        $sql .= " AND saisie_par_user_id = ?";
+        $params[] = $userId;
+    }
+    $sql .= " GROUP BY mode_paiement";
     $stmt = $this->db->prepare($sql);
     $stmt->execute($params);
     return $stmt->fetchAll();

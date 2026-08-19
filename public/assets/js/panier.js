@@ -1,4 +1,13 @@
 $(document).ready(function () {
+  let emailConfirme = null;
+
+  VerificationEmail.init("COMMANDE", function (email) {
+    emailConfirme = email;
+    $("#btn-soumettre-commande")
+      .prop("disabled", false)
+      .text("Valider la commande");
+  });
+
   $("#type-commande").on("change", function () {
     $("#champ-adresse").toggleClass("d-none", $(this).val() !== "LIVRAISON");
   });
@@ -20,6 +29,14 @@ $(document).ready(function () {
   $("#form-checkout").on("submit", function (e) {
     e.preventDefault();
 
+    if (!emailConfirme) {
+      afficherAlerte(
+        "danger",
+        "Veuillez vérifier votre email avant de continuer.",
+      );
+      return;
+    }
+
     $.ajax({
       url: "/commande/checkout",
       method: "POST",
@@ -36,7 +53,6 @@ $(document).ready(function () {
           return;
         }
 
-        // Paiement requis (emporter/livraison) : ouvre le choix du mode de paiement
         PaiementModal.ouvrir({
           type: "commande",
           id: response.commande_id,

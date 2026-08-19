@@ -63,7 +63,7 @@ $router->post('/admin/stocks/delete', 'admin/StockController@delete');
 
 $router->get('/admin/clients', 'admin/ClientController@index');
 $router->get('/admin/clients/detail', 'admin/ClientController@detail');
-$router->get('/admin/clients/rechercher-ajax', 'admin/ClientController@rechercherAjax');
+// $router->get('/admin/clients/rechercher-ajax', 'admin/ClientController@rechercherAjax');
 
 $router->get('/admin/avis', 'admin/AvisAdminController@index');
 $router->post('/admin/avis/repondre', 'admin/AvisAdminController@repondre');
@@ -79,3 +79,6 @@ $router->post('/admin/parametres/update', 'admin/ParametresController@update');
 
 $router->post('/verification/envoyer', 'VerificationController@envoyer');
 $router->post('/verification/verifier', 'VerificationController@verifier');
+
+$router->get('/admin/journal', 'admin/JournalController@index');
+$router->post('/admin/journal/store', 'admin/JournalController@store');
