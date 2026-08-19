@@ -3,6 +3,11 @@
 
 <div class="container py-5 text-center" style="margin-top: 80px; max-width: 500px;">
     <h2 class="font-title mb-4">🧾 Commande #<?= $commande['id'] ?? '' ?></h2>
+    <?php if (!empty($commande['mode_paiement']) && $commande['mode_paiement'] === 'CONTACT_RESTAURANT'): ?>
+    <div class="alert alert-info">📞 Le restaurant va vous contacter pour convenir du paiement.</div>
+    <?php elseif (!empty($commande['statut_paiement']) && $commande['statut_paiement'] === 'VERIFICATION_MANUELLE'): ?>
+    <div class="alert alert-warning">⏳ Votre paiement est en cours de vérification par le restaurant.</div>
+    <?php endif; ?>
 
     <div class="suivi-etapes mb-4" data-commande-id="<?= $commande['id'] ?? '' ?>">
         <div class="etape" data-statut="EN_ATTENTE">📝 Reçue</div>

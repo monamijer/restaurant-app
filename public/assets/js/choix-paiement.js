@@ -1,6 +1,3 @@
-// Module réutilisable : gère le modal de choix de paiement.
-// Utilisation : PaiementModal.ouvrir({ type: 'reservation'|'commande', id: X, params: {...} })
-
 const PaiementModal = (function () {
   let modal,
     config = {};
@@ -21,11 +18,10 @@ const PaiementModal = (function () {
         $("#tel-contact-affiche").text(
           config.params.telephone_contact || "nous contacter",
         );
-        enregistrerMethode("CONTACT_RESTAURANT", null);
+        // On n'enregistre plus ici : on attend que le client clique "J'ai compris"
         return;
       }
 
-      // Mobile money
       afficherEtape("mobile-money");
       const numeros = {
         AIRTEL_MONEY: config.params.numero_airtel_money,
@@ -54,12 +50,20 @@ const PaiementModal = (function () {
         return;
       }
       const methode = $(this).data("methode");
-      enregistrerMethode(methode, reference);
+      enregistrerMethode(
+        methode,
+        reference,
+        "Merci ! Votre paiement sera vérifié sous peu par le restaurant.",
+      );
     });
 
+    // Maintenant c'est CE clic qui déclenche réellement l'enregistrement
     $("#btn-confirmer-contact").on("click", function () {
-      modal.hide();
-      if (config.onSuccess) config.onSuccess();
+      enregistrerMethode(
+        "CONTACT_RESTAURANT",
+        null,
+        "Votre demande a été enregistrée. Le restaurant va vous contacter pour convenir du paiement.",
+      );
     });
   }
 
@@ -92,7 +96,7 @@ const PaiementModal = (function () {
     );
   }
 
-  function enregistrerMethode(methode, reference) {
+  function enregistrerMethode(methode, reference, messageConfirmation) {
     const url =
       config.type === "reservation"
         ? "/reservation/paiement-manuel"
@@ -109,11 +113,12 @@ const PaiementModal = (function () {
       },
       function (response) {
         if (response.success) {
+          $("#texte-confirmation-envoyee").text("✅ " + messageConfirmation);
           afficherEtape("confirmation-envoyee");
           setTimeout(() => {
             modal.hide();
-            if (config.onSuccess) config.onSuccess();
-          }, 2000);
+            if (config.onSuccess) config.onSuccess(methode);
+          }, 2500);
         } else {
           alert(response.message);
         }

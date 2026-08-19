@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="mb-3 d-none text-center" id="etape-confirmation-envoyee">
-                    <p>✅ Merci ! Votre paiement sera vérifié sous peu par le restaurant.</p>
+                <p id="texte-confirmation-envoyee"></p>
                 </div>
 
             </div>
