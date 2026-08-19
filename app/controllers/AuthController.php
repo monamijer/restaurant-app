@@ -19,11 +19,11 @@ class AuthController extends Controller {
         }
 
         if (Auth::attempt($email, $password)) {
-    $destinations = [
-        'ADMIN' => '/admin',
-        'SERVEUR' => '/admin/reservations',
-        'CUISINE' => '/admin/commandes',
-    ];
+   $destinations = [
+    'ADMIN' => '/admin',
+    'SERVEUR' => '/admin/journal',
+    'CUISINE' => '/admin/commandes',
+];
     header('Location: ' . ($destinations[Auth::role()] ?? '/'));
     exit;
 }

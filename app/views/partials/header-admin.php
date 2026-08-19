@@ -29,8 +29,9 @@
     <?php endif; ?>
 
     <?php if (in_array(Auth::role(), ['ADMIN', 'SERVEUR'])): ?>
-        <a href="/admin/reservations" class="<?= ($page ?? '') === 'reservations' ? 'active' : '' ?>">📅 Réservations</a>
-    <?php endif; ?>
+    <a href="/admin/journal" class="<?= ($page ?? '') === 'journal' ? 'active' : '' ?>">📓 Journal</a>
+    <a href="/admin/reservations" class="<?= ($page ?? '') === 'reservations' ? 'active' : '' ?>">📅 Réservations</a>
+<?php endif; ?>
 
     <?php if (in_array(Auth::role(), ['ADMIN', 'SERVEUR', 'CUISINE'])): ?>
         <a href="/admin/commandes" class="<?= ($page ?? '') === 'commandes' ? 'active' : '' ?>">🧾 Commandes</a>
