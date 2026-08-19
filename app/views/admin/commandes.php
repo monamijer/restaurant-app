@@ -19,7 +19,7 @@
                     <li><?= $ligne['quantite'] ?>x <?= htmlspecialchars($ligne['nom']) ?></li>
                 <?php endforeach; ?>
             </ul>
-            <strong><?= number_format($c['total'], 0, ',', ' ') ?> BIF</strong>
+            <<strong><?= number_format($c['total'], 0, ',', ' ') ?> <?= htmlspecialchars($devise) ?></strong>
 
             <?php if (!empty($c['mode_paiement'])): ?>
                 <p class="mt-2 mb-1">

@@ -36,6 +36,7 @@ class ParametresController extends Controller {
             'numero_orange_money',
             'numero_mpesa',
             'devise',
+            'devise_stripe',
         ];
 
         $data = [];

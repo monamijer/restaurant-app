@@ -22,7 +22,7 @@
                 <td><img src="/assets/uploads/<?= htmlspecialchars($plat['image'] ?? 'default.jpg') ?>" width="60" height="60" style="object-fit:cover; border-radius:4px;"></td>
                 <td><?= htmlspecialchars($plat['nom']) ?></td>
                 <td><?= htmlspecialchars($plat['categorie_nom']) ?></td>
-                <td><?= number_format($plat['prix'], 0, ',', ' ') ?> BIF</td>
+                <td><?= number_format($plat['prix'], 0, ',', ' ') ?> <?= htmlspecialchars($devise) ?></td>
                 <td>
                     <div class="form-check form-switch">
                         <input class="form-check-input toggle-dispo" type="checkbox" data-id="<?= $plat['id'] ?>" <?= $plat['disponible'] ? 'checked' : '' ?>>

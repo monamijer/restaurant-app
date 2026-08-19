@@ -24,6 +24,15 @@
             <option value="<?= $code ?>" <?= ($params['devise'] ?? 'BIF') === $code ? 'selected' : '' ?>><?= $code ?></option>
         <?php endforeach; ?>
     </select>
+            </div>
+            <div class="mb-3">
+    <label class="form-label">Devise pour les paiements par carte (Stripe)</label>
+    <select class="form-control" name="devise_stripe">
+        <?php foreach (['usd', 'eur', 'gbp', 'kes'] as $code): ?>
+            <option value="<?= $code ?>" <?= ($params['devise_stripe'] ?? 'usd') === $code ? 'selected' : '' ?>><?= strtoupper($code) ?></option>
+        <?php endforeach; ?>
+    </select>
+    <small style="color: var(--text-secondary);">Stripe ne supporte pas le BIF/CDF — cette devise sert uniquement au paiement par carte, indépendamment de la devise affichée sur le site.</small>
 </div>
         </div>
     </div>

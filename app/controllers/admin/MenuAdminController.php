@@ -11,7 +11,8 @@ class MenuAdminController extends Controller {
         $plats = $platModel->allWithCategorie();
         $categories = $categorieModel->allOrdered();
 
-        $this->render('admin/menu', ['plats' => $plats, 'categories' => $categories]);
+        $parametreModel = new Parametre();
+        $this->render('admin/menu', ['plats' => $plats, 'categories' => $categories, 'devise' => $parametreModel->get('devise', 'BIF')]);
     }
 
     public function store() {

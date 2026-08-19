@@ -29,7 +29,7 @@
                 <td><?= htmlspecialchars($c['telephone'] ?? '—') ?></td>
                 <td><?= $c['nb_reservations'] ?></td>
                 <td><?= $c['nb_commandes'] ?></td>
-                <td><strong><?= number_format($c['total_depense'], 0, ',', ' ') ?> BIF</strong></td>
+                <td><strong><?= number_format($c['total_depense'], 0, ',', ' ') ?> <?= htmlspecialchars($devise) ?></strong></td>
                 <td>
                     <?php if ($c['nb_no_show'] > 0): ?>
                         <span class="badge bg-danger"><?= $c['nb_no_show'] ?></span>
@@ -48,5 +48,6 @@
     <?php endif; ?>
 </div>
 
+<script>window.deviseActuelle = <?= json_encode($devise) ?>;</script>
 <script src="/assets/js/clients-admin.js"></script>
 <?php require __DIR__ . '/../partials/footer-admin.php'; ?>

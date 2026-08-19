@@ -7,13 +7,13 @@
     <div class="col-md-3 col-6">
         <div class="stat-card">
             <div class="stat-label">CA aujourd'hui</div>
-            <div class="stat-value" id="stat-ca-jour"><?= number_format($stats['ca_jour'], 0, ',', ' ') ?> BIF</div>
+            <div class="stat-value" id="stat-ca-jour"><?= number_format($stats['ca_jour'], 0, ',', ' ') ?> <?= htmlspecialchars($devise) ?></div>
         </div>
     </div>
     <div class="col-md-3 col-6">
         <div class="stat-card">
             <div class="stat-label">CA ce mois</div>
-            <div class="stat-value"><?= number_format($stats['ca_mois'], 0, ',', ' ') ?> BIF</div>
+            <div class="stat-value"><?= number_format($stats['ca_mois'], 0, ',', ' ') ?> <?= htmlspecialchars($devise) ?></div>
         </div>
     </div>
     <div class="col-md-3 col-6">

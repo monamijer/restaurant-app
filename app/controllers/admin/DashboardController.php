@@ -26,8 +26,8 @@ class DashboardController extends Controller {
             'prochaines_reservations' => $reservationModel->prochaines(5),
             'stock_bas' => $ingredientModel->stockBas(),
         ];
-
-        $this->render('admin/dashboard', ['stats' => $stats]);
+        $parametreModel = new Parametre();
+        $this->render('admin/dashboard', ['stats' => $stats, 'devise' => $parametreModel->get('devise', 'BIF')]);
     }
 
     // Endpoint AJAX pour rafraîchir les stats sans recharger la page

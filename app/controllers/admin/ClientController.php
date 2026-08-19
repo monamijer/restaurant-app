@@ -8,7 +8,8 @@ class ClientController extends Controller {
         $userModel = new User();
         $clients = $userModel->tousLesClients();
 
-        $this->render('admin/clients', ['clients' => $clients]);
+        $parametreModel = new Parametre();
+        $this->render('admin/clients', ['clients' => $clients, 'devise' => $parametreModel->get('devise', 'BIF')]);
     }
 
     public function detail() {
