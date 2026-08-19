@@ -13,3 +13,4 @@
 </head>
 <body>
     <div id="theme-toggle" class="theme-toggle">🌙</div>
+    <?php require __DIR__ . '/nav-client.php'; ?>
