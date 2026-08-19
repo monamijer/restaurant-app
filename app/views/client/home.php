@@ -67,7 +67,7 @@ if ($horaireAujourdhui && !$horaireAujourdhui['ferme']) {
                     <h2>Une passion transmise avec amour</h2>
                 </div>
                 <p style="color: var(--text-secondary);">
-                    [Texte à personnaliser avec ta sœur sur l'histoire du restaurant]
+                    [Texte  sur l'histoire du restaurant]
                 </p>
             </div>
         </div>
@@ -164,7 +164,7 @@ if ($horaireAujourdhui && !$horaireAujourdhui['ferme']) {
             <div class="col-lg-6">
                 <h3 class="font-title mb-3">Nous trouver</h3>
                 <p style="color: var(--text-secondary);">
-                    📍 [Adresse]<br>
+                    📍 Q. Nyamianda Av. <br>
                     📞 [Téléphone]<br>
                     ✉️ <?= htmlspecialchars($params['email_contact']) ?>
                 </p>
@@ -182,6 +182,7 @@ if ($horaireAujourdhui && !$horaireAujourdhui['ferme']) {
 
 <script src="/assets/js/preloader.js"></script>
 <script src="/assets/js/animations.js"></script>
+<script>window.deviseActuelle = <?= json_encode($params['devise']) ?>;</script>
 <script src="/assets/js/menu.js"></script>
 <script src="/assets/js/avis.js"></script>
 <?php require __DIR__ . '/../partials/footer-client.php'; ?>

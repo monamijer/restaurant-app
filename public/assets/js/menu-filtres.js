@@ -30,10 +30,10 @@ $(document).ready(function () {
                                 <div class="p-3">
                                     <div class="d-flex justify-content-between align-items-start">
                                         <h5 class="font-title mb-1">${plat.nom}</h5>
-                                        <span>${badges.join(' ')}</span>
+                                        <span>${badges.join(" ")}</span>
                                     </div>
                                     <p style="color: var(--text-secondary); font-size: 0.9rem;">${plat.description}</p>
-                                    <strong style="color: var(--accent);">${parseFloat(plat.prix).toLocaleString('fr-FR')} BIF</strong>
+                                     <strong style="color: var(--accent);">${parseFloat(plat.prix).toLocaleString("fr-FR")} ${window.deviseActuelle}</strong>
                                     <button class="btn btn-sm btn-accent mt-2 btn-ajouter-panier" data-id="${plat.id}">Ajouter au panier</button>
                                 </div>
                             </div>

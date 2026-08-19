@@ -17,7 +17,7 @@
                 <div class="d-flex align-items-center justify-content-between border-bottom py-3" data-plat-id="<?= $platId ?>">
                     <div>
                         <strong><?= htmlspecialchars($item['nom']) ?></strong><br>
-                        <span style="color: var(--text-secondary);"><?= number_format($item['prix'], 0, ',', ' ') ?> BIF</span>
+                        <span style="color: var(--text-secondary);"><?= number_format($item['prix'], 0, ',', ' ') ?> <?= htmlspecialchars($params['devise']) ?></span>
                     </div>
                     <div class="d-flex align-items-center gap-2">
                         <input type="number" class="form-control form-control-sm input-quantite" style="width: 70px;" value="<?= $item['quantite'] ?>" min="0" data-plat-id="<?= $platId ?>">
@@ -29,7 +29,7 @@
 
     <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
         <h4>Total</h4>
-        <h4 id="panier-total" style="color: var(--accent);"><?= number_format($panier['total'], 0, ',', ' ') ?> BIF</h4>
+        <h4 id="panier-total" style="color: var(--accent);"><?= number_format($panier['total'], 0, ',', ' ') ?> <?= htmlspecialchars($params['devise']) ?></h4>
     </div>
 
     <?php if (!empty($panier['items'])): ?>

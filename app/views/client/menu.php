@@ -22,6 +22,6 @@
 
     <div class="row g-4" id="plats-liste"></div>
 </div>
-
+<script>window.deviseActuelle = <?= json_encode($params['devise']) ?>;</script>
 <script src="/assets/js/menu-filtres.js"></script>
 <?php require __DIR__ . '/../partials/footer-client.php'; ?>
