@@ -52,4 +52,8 @@ public function rechercher(string $terme): array {
     $stmt->execute([$recherche, $recherche]);
     return $stmt->fetchAll();
 }   
+public function tousLesEmployes(): array {
+    $sql = "SELECT * FROM users WHERE role IN ('SERVEUR', 'CUISINE', 'ADMIN') ORDER BY role, nom ASC";
+    return $this->db->query($sql)->fetchAll();
+}
 }
