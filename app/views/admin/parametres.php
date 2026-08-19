@@ -17,6 +17,14 @@
                 <label class="form-label">Email de contact</label>
                 <input type="email" class="form-control" name="email_contact" value="<?= htmlspecialchars($params['email_contact']) ?>">
             </div>
+            <div class="mb-3">
+            <label class="form-label">Devise</label>
+              <select class="form-control" name="devise">
+        <?php foreach (['BIF', 'USD', 'EUR', 'CDF', 'KES', 'RWF'] as $code): ?>
+            <option value="<?= $code ?>" <?= ($params['devise'] ?? 'BIF') === $code ? 'selected' : '' ?>><?= $code ?></option>
+        <?php endforeach; ?>
+    </select>
+</div>
         </div>
     </div>
 
@@ -47,19 +55,19 @@
         <div class="card-body">
             <div class="mb-3">
                 <label class="form-label">Téléphone de contact</label>
-                <input type="text" class="form-control" name="telephone_contact" value="<?= htmlspecialchars($params['telephone_contact'] ?? '') ?>">
+                <input type="text" class="form-control" name="telephone_contact" value="<?= htmlspecialchars($params['telephone_contact'] ?? '') ?>" autocomplete="off" placeholder="+243...">
             </div>
             <div class="mb-3">
                 <label class="form-label">Numéro Airtel Money</label>
-                <input type="text" class="form-control" name="numero_airtel_money" value="<?= htmlspecialchars($params['numero_airtel_money'] ?? '') ?>">
+                <input type="text" class="form-control" name="numero_airtel_money" autocomplete="off" value="<?= htmlspecialchars($params['numero_airtel_money'] ?? '') ?>">
             </div>
             <div class="mb-3">
                 <label class="form-label">Numéro Orange Money</label>
-                <input type="text" class="form-control" name="numero_orange_money" value="<?= htmlspecialchars($params['numero_orange_money'] ?? '') ?>">
+                <input type="text" class="form-control" name="numero_orange_money" autocomplete="off" value="<?= htmlspecialchars($params['numero_orange_money'] ?? '') ?>">
             </div>
             <div class="mb-3">
                 <label class="form-label">Numéro M-Pesa</label>
-                <input type="text" class="form-control" name="numero_mpesa" value="<?= htmlspecialchars($params['numero_mpesa'] ?? '') ?>">
+                <input type="text" class="form-control" name="numero_mpesa" autocomplete="off" value="<?= htmlspecialchars($params['numero_mpesa'] ?? '') ?>">
             </div>
         </div>
     </div>

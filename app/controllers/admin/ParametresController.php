@@ -35,6 +35,7 @@ class ParametresController extends Controller {
             'numero_airtel_money',
             'numero_orange_money',
             'numero_mpesa',
+            'devise',
         ];
 
         $data = [];
