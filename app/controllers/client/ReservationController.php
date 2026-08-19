@@ -126,12 +126,15 @@ class ReservationController extends Controller {
 
         $montantCentimes = (int) round($reservation['montant_acompte'] * 100);
 
+
         try {
+            $parametreModel = new Parametre();
+            $config['stripe_devise'] = $parametreModel->get('devise_stripe', 'usd');
             $session = \Stripe\Checkout\Session::create([
                 'payment_method_types' => ['card'],
                 'line_items' => [[
                     'price_data' => [
-                        'currency' => 'usd',
+                        'currency' => $config['stripe_devise'] ?? 'usd',
                         'product_data' => ['name' => 'Acompte réservation - ' . $reservation['nb_personnes'] . ' personnes'],
                         'unit_amount' => $montantCentimes,
                     ],

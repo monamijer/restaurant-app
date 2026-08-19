@@ -1,25 +1,18 @@
 <?php
-
 class CommandeController extends Controller {
-
     public function ajouterPanier() {
         header('Content-Type: application/json');
-
         $platId = (int) ($_POST['plat_id'] ?? 0);
         $quantite = max(1, (int) ($_POST['quantite'] ?? 1));
-
         $platModel = new Plat();
         $plat = $platModel->find($platId);
-
         if (!$plat || !$plat['disponible']) {
             echo json_encode(['success' => false, 'message' => 'Ce plat n\'est plus disponible.']);
             return;
         }
-
         if (!isset($_SESSION['panier'])) {
             $_SESSION['panier'] = [];
         }
-
         if (isset($_SESSION['panier'][$platId])) {
             $_SESSION['panier'][$platId]['quantite'] += $quantite;
         } else {
@@ -30,7 +23,6 @@ class CommandeController extends Controller {
                 'quantite' => $quantite,
             ];
         }
-
         echo json_encode([
             'success' => true,
             'message' => $plat['nom'] . ' ajouté au panier',
@@ -40,16 +32,13 @@ class CommandeController extends Controller {
 
     public function modifierPanier() {
         header('Content-Type: application/json');
-
         $platId = (int) ($_POST['plat_id'] ?? 0);
         $quantite = (int) ($_POST['quantite'] ?? 0);
-
         if ($quantite <= 0) {
             unset($_SESSION['panier'][$platId]);
         } elseif (isset($_SESSION['panier'][$platId])) {
             $_SESSION['panier'][$platId]['quantite'] = $quantite;
         }
-
         echo json_encode(['success' => true, 'panier' => $this->calculerPanier()]);
     }
 
@@ -58,11 +47,9 @@ class CommandeController extends Controller {
             header('Location: /connexion');
             exit;
         }
-
         $panier = $this->calculerPanier();
         $parametreModel = new Parametre();
         $params = $parametreModel->getAll();
-
         $this->render('client/panier', ['panier' => $panier, 'params' => $params]);
     }
 
@@ -72,16 +59,13 @@ class CommandeController extends Controller {
             exit;
         }
         header('Content-Type: application/json');
-
         if (empty($_SESSION['panier'])) {
             echo json_encode(['success' => false, 'message' => 'Votre panier est vide.']);
             return;
         }
-
         $type = $_POST['type'] ?? '';
         $adresse = htmlspecialchars(trim($_POST['adresse_livraison'] ?? ''));
         $notes = htmlspecialchars(trim($_POST['notes'] ?? ''));
-
         if (!in_array($type, ['SUR_PLACE', 'EMPORTER', 'LIVRAISON'])) {
             echo json_encode(['success' => false, 'message' => 'Type de commande invalide.']);
             return;
@@ -90,12 +74,10 @@ class CommandeController extends Controller {
             echo json_encode(['success' => false, 'message' => 'Adresse de livraison requise.']);
             return;
         }
-
         $total = 0;
         foreach ($_SESSION['panier'] as $item) {
             $total += $item['prix'] * $item['quantite'];
         }
-
         $commandeModel = new Commande();
         $commandeId = $commandeModel->creerAvecLignes([
             'user_id' => Auth::user()['id'],
@@ -106,9 +88,7 @@ class CommandeController extends Controller {
             'notes' => $notes ?: null,
             'statut_paiement' => $type === 'SUR_PLACE' ? 'NON_REQUIS' : 'EN_ATTENTE',
         ], $_SESSION['panier']);
-
         unset($_SESSION['panier']);
-
         if ($type === 'SUR_PLACE') {
             echo json_encode([
                 'success' => true,
@@ -117,7 +97,6 @@ class CommandeController extends Controller {
             ]);
             return;
         }
-
         echo json_encode([
             'success' => true,
             'paiement_requis' => true,
@@ -129,24 +108,23 @@ class CommandeController extends Controller {
         header('Content-Type: application/json');
         $config = require __DIR__ . '/../../../config/config.php';
         \Stripe\Stripe::setApiKey($config['stripe_secret_key']);
-
         $commandeId = (int) ($_POST['commande_id'] ?? 0);
         $commandeModel = new Commande();
         $commande = $commandeModel->find($commandeId);
-
         if (!$commande || $commande['statut'] !== 'EN_ATTENTE') {
             echo json_encode(['success' => false, 'message' => 'Commande invalide.']);
             return;
         }
-
         $montantCentimes = (int) round($commande['total'] * 100);
-
         try {
+            $parametreModel = new Parametre();
+            $config['stripe_devise'] = $parametreModel->get('devise_stripe', 'usd');
+
             $session = \Stripe\Checkout\Session::create([
                 'payment_method_types' => ['card'],
                 'line_items' => [[
                     'price_data' => [
-                        'currency' => 'usd',
+                        'currency' => $config['stripe_devise'] ?? 'usd',
                         'product_data' => ['name' => 'Commande #' . $commandeId],
                         'unit_amount' => $montantCentimes,
                     ],
@@ -157,7 +135,6 @@ class CommandeController extends Controller {
                 'cancel_url' => 'http://restaurant.local/panier',
                 'metadata' => ['type' => 'commande', 'commande_id' => $commandeId],
             ]);
-
             $commandeModel->update($commandeId, ['stripe_id' => $session->id, 'mode_paiement' => 'STRIPE', 'statut_paiement' => 'EN_ATTENTE']);
             echo json_encode(['success' => true, 'checkout_url' => $session->url]);
         } catch (\Exception $e) {
@@ -167,19 +144,15 @@ class CommandeController extends Controller {
 
     public function paiementManuel() {
         header('Content-Type: application/json');
-
         $commandeId = (int) ($_POST['commande_id'] ?? 0);
         $modePaiement = $_POST['mode_paiement'] ?? '';
         $reference = htmlspecialchars(trim($_POST['reference_paiement'] ?? ''));
-
         if (!in_array($modePaiement, ['AIRTEL_MONEY', 'ORANGE_MONEY', 'MPESA', 'CONTACT_RESTAURANT'])) {
             echo json_encode(['success' => false, 'message' => 'Mode de paiement invalide.']);
             return;
         }
-
         $commandeModel = new Commande();
         $data = ['mode_paiement' => $modePaiement];
-
         if ($modePaiement === 'CONTACT_RESTAURANT') {
             $data['statut_paiement'] = 'EN_ATTENTE';
         } else {
@@ -190,8 +163,17 @@ class CommandeController extends Controller {
             $data['reference_paiement'] = $reference;
             $data['statut_paiement'] = 'VERIFICATION_MANUELLE';
         }
-
         $commandeModel->update($commandeId, $data);
+        $commande = $commandeModel->findAvecUser($commandeId);
+        $parametreModel = new Parametre();
+        $emailAdmin = $parametreModel->get('email_contact');
+        Mailer::notifierAdminPaiementManuel('Commande #' . $commandeId, [
+            'nom' => $commande['user_nom'],
+            'telephone' => $commande['telephone'] ?? 'non renseigné',
+            'mode_paiement' => $modePaiement,
+            'reference' => $reference,
+            'description' => $commande['type'] . ' — ' . number_format($commande['total'], 0, ',', ' ') . ' ' . $parametreModel->get('devise', 'BIF'),
+        ], $emailAdmin);
         echo json_encode(['success' => true, 'message' => 'Enregistré.']);
     }
 
@@ -199,17 +181,14 @@ class CommandeController extends Controller {
         $id = (int) ($_GET['id'] ?? 0);
         $commandeModel = new Commande();
         $commande = $commandeModel->find($id);
-
         $this->render('client/suivi-commande', ['commande' => $commande]);
     }
 
     public function statutAjax() {
         header('Content-Type: application/json');
         $id = (int) ($_GET['id'] ?? 0);
-
         $commandeModel = new Commande();
         $commande = $commandeModel->find($id);
-
         echo json_encode(['statut' => $commande['statut'] ?? null]);
     }
 
