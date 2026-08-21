@@ -39,6 +39,7 @@
 
     <?php if (Auth::role() === 'ADMIN'): ?>
         <a href="/admin/stocks" class="<?= ($page ?? '') === 'stocks' ? 'active' : '' ?>">📦 Stocks</a>
+        <a href="/admin/depenses" class="<?= ($page ?? '') === 'depenses' ? 'active' : '' ?>">💸 Dépenses</a>
         <a href="/admin/clients" class="<?= ($page ?? '') === 'clients' ? 'active' : '' ?>">👤 Clients</a>
         <a href="/admin/avis" class="<?= ($page ?? '') === 'avis' ? 'active' : '' ?>">⭐ Avis</a>
         <a href="/admin/employes" class="<?= ($page ?? '') === 'employes' ? 'active' : '' ?>">👥 Employés</a>

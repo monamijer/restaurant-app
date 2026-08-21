@@ -75,6 +75,11 @@ $router->post('/admin/employes/store', 'admin/EmployeController@store');
 $router->post('/admin/employes/update', 'admin/EmployeController@update');
 $router->post('/admin/employes/delete', 'admin/EmployeController@delete');
 
+$router->get('/admin/depenses', 'admin/DepenseController@index');
+$router->post('/admin/depenses/store', 'admin/DepenseController@store');
+$router->post('/admin/depenses/update', 'admin/DepenseController@update');
+$router->post('/admin/depenses/delete', 'admin/DepenseController@delete');
+
 $router->get('/admin/parametres', 'admin/ParametresController@index');
 $router->post('/admin/parametres/update', 'admin/ParametresController@update');
 
@@ -83,3 +88,8 @@ $router->post('/verification/verifier', 'VerificationController@verifier');
 
 $router->get('/admin/journal', 'admin/JournalController@index');
 $router->post('/admin/journal/store', 'admin/JournalController@store');
+
+$router->get('/mot-de-passe-oublie', 'AuthController@motDePasseOublieForm');
+$router->post('/mot-de-passe-oublie', 'AuthController@motDePasseOublieEnvoyer');
+$router->get('/reinitialiser-mot-de-passe', 'AuthController@reinitialiserForm');
+$router->post('/reinitialiser-mot-de-passe', 'AuthController@reinitialiser');
