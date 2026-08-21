@@ -22,6 +22,7 @@ $router->get('/commande/statut-ajax', 'client/CommandeController@statutAjax');
 
 $router->get('/avis', 'client/AvisController@index');
 $router->post('/avis/ajouter', 'client/AvisController@store');
+$router->get('/api/avis-internes', 'client/AvisController@apiAvisRecents');
 
 $router->post('/webhook/stripe', 'StripeWebhookController@handle');
 

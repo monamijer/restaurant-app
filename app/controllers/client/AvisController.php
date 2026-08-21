@@ -64,4 +64,12 @@ class AvisController extends Controller {
 
         echo json_encode(['success' => true, 'message' => 'Merci pour votre avis !']);
     }
+    public function apiAvisRecents() {
+    header('Content-Type: application/json');
+
+    $avisModel = new Avis();
+    $avis = $avisModel->publiesAvecUser(6);
+
+    echo json_encode($avis);
+}
 }
