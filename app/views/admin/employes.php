@@ -67,9 +67,8 @@
                         <label class="form-label">Nom complet</label>
                         <input type="text" class="form-control" name="nom" id="emp-nom" required>
                     </div>
-                    <div class="mb-3" id="champ-email">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" name="email" id="emp-email" required>
+                   <div id="bloc-verif-employe">
+                    <?php require __DIR__ . '/../partials/verification-email.php'; ?>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Téléphone</label>
@@ -90,12 +89,13 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-accent">Enregistrer</button>
+                    <button type="submit" class="btn btn-accent" id="btn-enregistrer-employe">Enregistrer</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
+<script src="/assets/js/verification-email.js"></script>
 <script src="/assets/js/employes-admin.js"></script>
 <?php require __DIR__ . '/../partials/footer-admin.php'; ?>

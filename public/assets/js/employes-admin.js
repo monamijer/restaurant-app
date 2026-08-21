@@ -1,15 +1,24 @@
 $(document).ready(function () {
   const modal = new bootstrap.Modal(document.getElementById("modalEmploye"));
+  let modeEdition = false;
 
   $("#btn-nouvel-employe").on("click", function () {
     $("#form-employe")[0].reset();
     $("#emp-id").val("");
     $("#modal-employe-titre").text("Ajouter un employé");
-    $("#champ-email").show();
-    $("#emp-email").prop("required", true);
+    modeEdition = false;
+
+    $("#bloc-verif-employe").show();
     $("#emp-password").prop("required", true);
     $("#label-password").text("Mot de passe");
     $("#hint-password").text("");
+    $("#btn-enregistrer-employe")
+      .prop("disabled", true)
+      .text("Vérifiez d'abord l'email");
+
+    VerificationEmail.init("EMPLOYE", function () {
+      $("#btn-enregistrer-employe").prop("disabled", false).text("Enregistrer");
+    });
   });
 
   $(document).on("click", ".btn-editer-employe", function () {
@@ -18,16 +27,20 @@ $(document).ready(function () {
     $("#emp-nom").val($(this).data("nom"));
     $("#emp-telephone").val($(this).data("telephone"));
     $("#emp-role").val($(this).data("role"));
+    modeEdition = true;
 
-    $("#champ-email").hide();
-    $("#emp-email").prop("required", false);
-
+    $("#bloc-verif-employe").hide();
     $("#emp-password").val("").prop("required", false);
     $("#label-password").text("Nouveau mot de passe (optionnel)");
     $("#hint-password").text(
       "Laissez vide pour conserver le mot de passe actuel.",
     );
+    $("#btn-enregistrer-employe").prop("disabled", false).text("Enregistrer");
 
+    modal.show();
+  });
+
+  $("#btn-nouvel-employe").on("click", function () {
     modal.show();
   });
 

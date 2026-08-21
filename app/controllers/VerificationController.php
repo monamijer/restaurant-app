@@ -11,7 +11,7 @@ public function envoyer() {
         echo json_encode(['success' => false, 'message' => 'Email invalide.']);
         return;
     }
-    if (!in_array($type, ['RESERVATION', 'COMMANDE', 'AVIS'])) {
+    if (!in_array($type, ['RESERVATION', 'COMMANDE', 'AVIS', 'EMPLOYE'])) {
         echo json_encode(['success' => false, 'message' => 'Type invalide.']);
         return;
     }
