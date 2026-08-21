@@ -72,4 +72,23 @@ public static function envoyerCodeVerification(string $email, string $code): boo
     ";
     return self::envoyer($email, '', 'Votre code de vérification', $html);
 }
+// ⚠️ MODE_SIMULATION_TEMPORAIRE — À RETIRER dès que Brevo est configuré
+public static function envoyerLienReinitialisation(string $email, string $lien): bool {
+    $config = require __DIR__ . '/../../config/config.php';
+
+    if (empty($config['brevo_api_key'])) {
+        error_log("⚠️ SIMULATION — Lien de réinitialisation pour $email : $lien");
+        return true;
+    }
+    // ⚠️ FIN MODE_SIMULATION_TEMPORAIRE
+
+    $html = "
+        <p>Vous avez demandé à réinitialiser votre mot de passe.</p>
+        <p><a href='$lien' style='background:#b8894f;color:#fff;padding:10px 20px;text-decoration:none;border-radius:4px;'>Réinitialiser mon mot de passe</a></p>
+        <p>Ce lien est valable 30 minutes et ne peut être utilisé qu'une seule fois. Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.</p>
+    ";
+    return self::envoyer($email, '', 'Réinitialisation de votre mot de passe', $html);
+}
+
+
 }
