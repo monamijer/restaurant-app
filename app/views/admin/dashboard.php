@@ -17,6 +17,20 @@
         </div>
     </div>
     <div class="col-md-3 col-6">
+    <div class="stat-card">
+        <div class="stat-label">Dépenses ce mois</div>
+        <div class="stat-value" style="color:#e53935;"><?= number_format($stats['depenses_mois'], 0, ',', ' ') ?> <?= htmlspecialchars($devise) ?></div>
+    </div>
+</div>
+<div class="col-md-3 col-6">
+    <div class="stat-card">
+        <div class="stat-label">Bénéfice net ce mois</div>
+        <div class="stat-value" style="color: <?= $stats['benefice_mois'] >= 0 ? '#4caf50' : '#e53935' ?>;">
+            <?= number_format($stats['benefice_mois'], 0, ',', ' ') ?> <?= htmlspecialchars($devise) ?>
+        </div>
+    </div>
+</div>
+    <div class="col-md-3 col-6">
         <div class="stat-card">
             <div class="stat-label">Commandes aujourd'hui</div>
             <div class="stat-value" id="stat-nb-commandes"><?= $stats['nb_commandes_jour'] ?></div>
