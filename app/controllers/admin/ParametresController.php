@@ -1,10 +1,12 @@
 <?php
+
 require_once __DIR__ . '/../../core/Controller.php';
 require_once __DIR__ . '/../../models/Parametre.php';
 
-class ParametresController extends Controller {
-
-    public function index() {
+class ParametresController extends Controller
+{
+    public function index()
+    {
         $this->requireRole('ADMIN');
 
         $parametreModel = new Parametre();
@@ -13,7 +15,8 @@ class ParametresController extends Controller {
         $this->render('admin/parametres', ['params' => $params]);
     }
 
-    public function update() {
+    public function update()
+    {
         $this->requireRole('ADMIN');
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -37,6 +40,9 @@ class ParametresController extends Controller {
             'numero_mpesa',
             'devise',
             'devise_stripe',
+            'nom_proprietaire',
+            'titre_proprietaire',
+            'bio_proprietaire',
         ];
 
         $data = [];
@@ -48,9 +54,35 @@ class ParametresController extends Controller {
             }
         }
 
+        // Upload de la photo du propriétaire si fournie
+        if (!empty($_FILES['photo_proprietaire']['name'])) {
+
+            $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'webp'];
+            $extension = strtolower(pathinfo($_FILES['photo_proprietaire']['name'], PATHINFO_EXTENSION));
+
+            if (!in_array($extension, $extensionsAutorisees)) {
+            } elseif (!getimagesize($_FILES['photo_proprietaire']['tmp_name'])) {
+            } else {
+                $nomFichier = uniqid('proprio_') . '.' . $extension;
+                $destination = __DIR__ . '/../../../public/assets/uploads/' . $nomFichier;
+
+                if (move_uploaded_file($_FILES['photo_proprietaire']['tmp_name'], $destination)) {
+                    $data['photo_proprietaire'] = $nomFichier;
+                } else {
+                    
+                }
+            }
+        }
+
         $parametreModel->setMultiple($data);
 
         header('Content-Type: application/json');
+
+        if (!empty($_FILES['photo_proprietaire']['name']) && empty($data['photo_proprietaire'])) {
+            echo json_encode(['success' => false, 'message' => 'Les paramètres ont été enregistrés, mais l\'upload de la photo a échoué. Vérifiez le format ou réessayez.']);
+            return;
+        }
+
         echo json_encode(['success' => true, 'message' => 'Paramètres enregistrés']);
     }
 }
