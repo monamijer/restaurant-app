@@ -1,32 +1,30 @@
 $(document).ready(function () {
-    $('#form-parametres').on('submit', function (e) {
-        e.preventDefault();
+  $("#form-parametres").on("submit", function (e) {
+    e.preventDefault();
 
-        const formData = $(this).serialize();
+    const formData = new FormData(this);
 
-        $.ajax({
-            url: '/admin/parametres/update',
-            method: 'POST',
-            data: formData,
-            dataType: 'json',
-            beforeSend: function () {
-                $('#alert-zone').html('');
-            },
-            success: function (response) {
-                if (response.success) {
-                    $('#alert-zone').html(
-                        `<div class="alert alert-success alert-dismissible fade show">
-                            ${response.message}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>`
-                    );
-                }
-            },
-            error: function () {
-                $('#alert-zone').html(
-                    `<div class="alert alert-danger">Une erreur est survenue. Réessayez.</div>`
-                );
-            }
-        });
+    $.ajax({
+      url: "/admin/parametres/update",
+      method: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      dataType: "json",
+      success: function (response) {
+        if (response.success) {
+          afficherToast("success", response.message);
+          setTimeout(() => location.reload(), 1000);
+        } else {
+          afficherToast("danger", response.message);
+        }
+      },
+      error: function (xhr) {
+        afficherToast(
+          "danger",
+          "Une erreur est survenue (code " + xhr.status + ").",
+        );
+      },
     });
+  });
 });
