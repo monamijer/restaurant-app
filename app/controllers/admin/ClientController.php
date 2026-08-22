@@ -1,8 +1,9 @@
 <?php
 
-class ClientController extends Controller {
-
-    public function index() {
+class ClientController extends Controller
+{
+    public function index()
+    {
         $this->requireRole('ADMIN');
 
         $sql = "SELECT 
@@ -49,23 +50,28 @@ class ClientController extends Controller {
             $clients[$email]['nb_reservations'] += (int) $l['nb_reservations'];
             $clients[$email]['nb_commandes'] += (int) $l['nb_commandes'];
             $clients[$email]['total_depense'] += (float) $l['total_depense'];
-            if (!$clients[$email]['nom']) $clients[$email]['nom'] = $l['nom'];
-            if (!$clients[$email]['telephone']) $clients[$email]['telephone'] = $l['telephone'];
+            if (!$clients[$email]['nom']) {
+                $clients[$email]['nom'] = $l['nom'];
+            }
+            if (!$clients[$email]['telephone']) {
+                $clients[$email]['telephone'] = $l['telephone'];
+            }
         }
 
-        usort($clients, fn($a, $b) => $b['total_depense'] <=> $a['total_depense']);
+        usort($clients, fn ($a, $b) => $b['total_depense'] <=> $a['total_depense']);
 
         $parametreModel = new Parametre();
         $this->render('admin/clients', ['clients' => array_values($clients), 'devise' => $parametreModel->get('devise', 'BIF')]);
     }
 
-    public function detail() {
+    public function detail()
+    {
         $this->requireRole('ADMIN');
 
         $email = trim($_GET['email'] ?? '');
         if (!$email) {
             http_response_code(404);
-            echo "Client introuvable.";
+            echo 'Client introuvable.';
             return;
         }
 
@@ -74,11 +80,11 @@ class ClientController extends Controller {
 
         $db = Database::getInstance();
 
-        $stmt = $db->prepare("SELECT * FROM reservations WHERE guest_email = ? ORDER BY date_reservation DESC LIMIT 10");
+        $stmt = $db->prepare('SELECT * FROM reservations WHERE guest_email = ? ORDER BY date_reservation DESC LIMIT 10');
         $stmt->execute([$email]);
         $reservations = $stmt->fetchAll();
 
-        $stmt = $db->prepare("SELECT * FROM commandes WHERE guest_email = ? ORDER BY created_at DESC LIMIT 10");
+        $stmt = $db->prepare('SELECT * FROM commandes WHERE guest_email = ? ORDER BY created_at DESC LIMIT 10');
         $stmt->execute([$email]);
         $commandes = $stmt->fetchAll();
 

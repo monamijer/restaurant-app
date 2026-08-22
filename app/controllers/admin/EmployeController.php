@@ -1,8 +1,9 @@
 <?php
 
-class EmployeController extends Controller {
-
-    public function index() {
+class EmployeController extends Controller
+{
+    public function index()
+    {
         $this->requireRole('ADMIN');
 
         $userModel = new User();
@@ -11,33 +12,35 @@ class EmployeController extends Controller {
         $this->render('admin/employes', ['employes' => $employes]);
     }
 
-    public function store() {
-    $this->requireRole('ADMIN');
-    header('Content-Type: application/json');
+    public function store()
+    {
+        $this->requireRole('ADMIN');
+        header('Content-Type: application/json');
 
-    $data = $this->validerDonnees();
-    if (isset($data['erreur'])) {
-        echo json_encode(['success' => false, 'message' => $data['erreur']]);
-        return;
+        $data = $this->validerDonnees();
+        if (isset($data['erreur'])) {
+            echo json_encode(['success' => false, 'message' => $data['erreur']]);
+            return;
+        }
+
+        $verifModel = new VerificationEmail();
+        if (!$verifModel->estRecemmentVerifie($data['email'], 'EMPLOYE')) {
+            echo json_encode(['success' => false, 'message' => 'Veuillez vérifier l\'email avant de créer le compte.']);
+            return;
+        }
+
+        $userModel = new User();
+        if ($userModel->emailExists($data['email'])) {
+            echo json_encode(['success' => false, 'message' => 'Un compte existe déjà avec cet email.']);
+            return;
+        }
+
+        $userModel->createUser($data);
+        echo json_encode(['success' => true, 'message' => 'Employé ajouté.']);
     }
 
-    $verifModel = new VerificationEmail();
-    if (!$verifModel->estRecemmentVerifie($data['email'], 'EMPLOYE')) {
-        echo json_encode(['success' => false, 'message' => 'Veuillez vérifier l\'email avant de créer le compte.']);
-        return;
-    }
-
-    $userModel = new User();
-    if ($userModel->emailExists($data['email'])) {
-        echo json_encode(['success' => false, 'message' => 'Un compte existe déjà avec cet email.']);
-        return;
-    }
-
-    $userModel->createUser($data);
-    echo json_encode(['success' => true, 'message' => 'Employé ajouté.']);
-}
-
-    public function update() {
+    public function update()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -80,7 +83,8 @@ class EmployeController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Employé mis à jour.']);
     }
 
-    public function delete() {
+    public function delete()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -97,7 +101,8 @@ class EmployeController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Employé supprimé.']);
     }
 
-    private function validerDonnees(): array {
+    private function validerDonnees(): array
+    {
         $nom = trim($_POST['nom'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';

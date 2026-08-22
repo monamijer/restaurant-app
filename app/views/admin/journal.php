@@ -1,4 +1,5 @@
-<?php $titrePage = 'Journal'; $page = 'journal'; ?>
+<?php $titrePage = 'Journal';
+$page = 'journal'; ?>
 <?php require __DIR__ . '/../partials/header-admin.php'; ?>
 
 <h2 class="mb-4">📓 Journal des ventes</h2>

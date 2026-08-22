@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/../app/core/Env.php';
 Env::load(__DIR__ . '/../.env');
 

@@ -1,4 +1,5 @@
-<?php $titrePage = 'Menu'; $page = 'menu'; ?>
+<?php $titrePage = 'Menu';
+$page = 'menu'; ?>
 <?php require __DIR__ . '/../partials/header-admin.php'; ?>
 
 <h2 class="mb-4">🍽️ Gestion du menu</h2>

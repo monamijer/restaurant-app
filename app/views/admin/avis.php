@@ -1,4 +1,5 @@
-<?php $titrePage = 'Avis'; $page = 'avis'; ?>
+<?php $titrePage = 'Avis';
+$page = 'avis'; ?>
 <?php require __DIR__ . '/../partials/header-admin.php'; ?>
 
 <h2 class="mb-4">⭐ Modération des avis</h2>

@@ -1,4 +1,5 @@
-<?php $titrePage = 'Stocks'; $page = 'stocks'; ?>
+<?php $titrePage = 'Stocks';
+$page = 'stocks'; ?>
 <?php require __DIR__ . '/../partials/header-admin.php'; ?>
 
 <h2 class="mb-4">📦 Gestion des stocks</h2>
@@ -26,7 +27,7 @@
             <?php
                 $stockBas = $ing['quantite_stock'] <= $ing['seuil_alerte'];
                 $peremptionProche = $ing['date_peremption'] && strtotime($ing['date_peremption']) <= strtotime('+3 days');
-            ?>
+                ?>
             <tr data-id="<?= $ing['id'] ?>" class="<?= $stockBas ? 'table-danger' : '' ?>">
                 <td><?= htmlspecialchars($ing['nom']) ?></td>
                 <td>

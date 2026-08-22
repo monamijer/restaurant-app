@@ -1,7 +1,9 @@
 <?php
 
-class StripeWebhookController extends Controller {
-    public function handle() {
+class StripeWebhookController extends Controller
+{
+    public function handle()
+    {
         $config = require __DIR__ . '/../../config/config.php';
         \Stripe\Stripe::setApiKey($config['stripe_secret_key']);
 

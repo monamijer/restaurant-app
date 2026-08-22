@@ -1,7 +1,9 @@
 <?php
 
-class Env {
-    public static function load(string $path): void {
+class Env
+{
+    public static function load(string $path): void
+    {
         if (!file_exists($path)) {
             return;
         }

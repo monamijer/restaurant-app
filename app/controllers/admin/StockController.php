@@ -1,8 +1,9 @@
 <?php
 
-class StockController extends Controller {
-
-    public function index() {
+class StockController extends Controller
+{
+    public function index()
+    {
         $this->requireRole('ADMIN');
 
         $ingredientModel = new Ingredient();
@@ -11,7 +12,8 @@ class StockController extends Controller {
         $this->render('admin/stocks', ['ingredients' => $ingredients]);
     }
 
-    public function store() {
+    public function store()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -27,7 +29,8 @@ class StockController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Ingrédient ajouté.']);
     }
 
-    public function update() {
+    public function update()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -50,7 +53,8 @@ class StockController extends Controller {
     }
 
     // Ajustement rapide de la quantité uniquement (sans passer par le formulaire complet)
-    public function ajusterStock() {
+    public function ajusterStock()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -68,7 +72,8 @@ class StockController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Stock ajusté.']);
     }
 
-    public function delete() {
+    public function delete()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -79,7 +84,8 @@ class StockController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Ingrédient supprimé.']);
     }
 
-    private function validerDonnees(): array {
+    private function validerDonnees(): array
+    {
         $nom = trim($_POST['nom'] ?? '');
         $stock = $_POST['quantite_stock'] ?? '';
         $unite = trim($_POST['unite'] ?? '');

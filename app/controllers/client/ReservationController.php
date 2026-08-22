@@ -1,15 +1,17 @@
 <?php
 
-class ReservationController extends Controller {
-
-    public function index() {
+class ReservationController extends Controller
+{
+    public function index()
+    {
         $parametreModel = new Parametre();
         $params = $parametreModel->getAll();
 
         $this->render('client/reservation', ['params' => $params]);
     }
 
-    public function store() {
+    public function store()
+    {
         header('Content-Type: application/json');
 
         $nom = trim($_POST['nom'] ?? '');
@@ -110,7 +112,8 @@ class ReservationController extends Controller {
         ]);
     }
 
-    public function creerPaiement() {
+    public function creerPaiement()
+    {
         header('Content-Type: application/json');
         $config = require __DIR__ . '/../../../config/config.php';
         \Stripe\Stripe::setApiKey($config['stripe_secret_key']);
@@ -125,7 +128,6 @@ class ReservationController extends Controller {
         }
 
         $montantCentimes = (int) round($reservation['montant_acompte'] * 100);
-
 
         try {
             $parametreModel = new Parametre();
@@ -153,7 +155,8 @@ class ReservationController extends Controller {
         }
     }
 
-    public function paiementManuel() {
+    public function paiementManuel()
+    {
         header('Content-Type: application/json');
 
         $reservationId = (int) ($_POST['reservation_id'] ?? 0);
@@ -202,7 +205,8 @@ class ReservationController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Enregistré.']);
     }
 
-    public function confirmation() {
+    public function confirmation()
+    {
         $id = (int) ($_GET['id'] ?? 0);
         $reservationModel = new Reservation();
         $reservation = $reservationModel->find($id);

@@ -1,7 +1,9 @@
 <?php
 
-class MenuController extends Controller {
-    public function index() {
+class MenuController extends Controller
+{
+    public function index()
+    {
         $platModel = new Plat();
         $categorieModel = new Categorie();
         $parametreModel = new Parametre();
@@ -18,7 +20,8 @@ class MenuController extends Controller {
     }
 
     // Endpoint AJAX appelé par les filtres
-    public function filtrer() {
+    public function filtrer()
+    {
         header('Content-Type: application/json');
 
         $platModel = new Plat();

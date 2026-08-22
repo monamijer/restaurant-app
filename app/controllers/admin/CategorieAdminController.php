@@ -1,8 +1,9 @@
 <?php
 
-class CategorieAdminController extends Controller {
-
-    public function index() {
+class CategorieAdminController extends Controller
+{
+    public function index()
+    {
         $this->requireRole('ADMIN');
 
         $categorieModel = new Categorie();
@@ -11,7 +12,8 @@ class CategorieAdminController extends Controller {
         $this->render('admin/categories', ['categories' => $categories]);
     }
 
-    public function store() {
+    public function store()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -30,7 +32,8 @@ class CategorieAdminController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Catégorie ajoutée.']);
     }
 
-    public function update() {
+    public function update()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -48,7 +51,8 @@ class CategorieAdminController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Catégorie mise à jour.']);
     }
 
-    public function delete() {
+    public function delete()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -65,7 +69,8 @@ class CategorieAdminController extends Controller {
     }
 
     // Réordonnancement par glisser-déposer
-    public function reordonner() {
+    public function reordonner()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 

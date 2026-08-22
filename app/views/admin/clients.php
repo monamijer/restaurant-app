@@ -1,4 +1,5 @@
-<?php $titrePage = 'Clients'; $page = 'clients'; ?>
+<?php $titrePage = 'Clients';
+$page = 'clients'; ?>
 <?php require __DIR__ . '/../partials/header-admin.php'; ?>
 
 <h2 class="mb-4">👤 Clients</h2>

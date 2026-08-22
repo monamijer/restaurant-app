@@ -1,4 +1,5 @@
-<?php $titrePage = 'Catégories'; $page = 'categories'; ?>
+<?php $titrePage = 'Catégories';
+$page = 'categories'; ?>
 <?php require __DIR__ . '/../partials/header-admin.php'; ?>
 
 <h2 class="mb-4">🏷️ Catégories du menu</h2>

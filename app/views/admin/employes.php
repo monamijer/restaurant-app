@@ -1,4 +1,5 @@
-<?php $titrePage = 'Employés'; $page = 'employes'; ?>
+<?php $titrePage = 'Employés';
+$page = 'employes'; ?>
 <?php require __DIR__ . '/../partials/header-admin.php'; ?>
 
 <h2 class="mb-4">👥 Gestion des employés</h2>

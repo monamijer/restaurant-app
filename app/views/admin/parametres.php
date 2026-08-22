@@ -1,11 +1,12 @@
-<?php $titrePage = 'Paramètres'; $page = 'parametres'; ?>
+<?php $titrePage = 'Paramètres';
+$page = 'parametres'; ?>
 <?php require __DIR__ . '/../partials/header-admin.php'; ?>
 
 <h2 class="mb-4">⚙️ Paramètres du restaurant</h2>
 
 <div id="alert-zone"></div>
 
-<form id="form-parametres">
+<form id="form-parametres" enctype="multipart/form-data">
     <div class="card mb-3">
         <div class="card-header">Informations générales</div>
         <div class="card-body">
@@ -23,7 +24,7 @@
         <?php foreach (['BIF', 'USD', 'EUR', 'CDF', 'KES', 'RWF'] as $code): ?>
             <option value="<?= $code ?>" <?= ($params['devise'] ?? 'BIF') === $code ? 'selected' : '' ?>><?= $code ?></option>
         <?php endforeach; ?>
-    </select>
+             </select>
             </div>
             <div class="mb-3">
     <label class="form-label">Devise pour les paiements par carte (Stripe)</label>
@@ -36,6 +37,30 @@
 </div>
         </div>
     </div>
+    <div class="card mb-3">
+    <div class="card-header">Propriétaire / Chef</div>
+    <div class="card-body">
+        <div class="mb-3">
+            <label class="form-label">Nom</label>
+            <input type="text" class="form-control" name="nom_proprietaire" value="<?= htmlspecialchars($params['nom_proprietaire'] ?? '') ?>">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Titre</label>
+            <input type="text" class="form-control" name="titre_proprietaire" value="<?= htmlspecialchars($params['titre_proprietaire'] ?? 'Fondatrice & Chef') ?>">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Biographie courte</label>
+            <textarea class="form-control" name="bio_proprietaire" rows="3"><?= htmlspecialchars($params['bio_proprietaire'] ?? '') ?></textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Photo actuelle</label><br>
+            <?php if (!empty($params['photo_proprietaire'])): ?>
+                <img src="/assets/uploads/<?= htmlspecialchars($params['photo_proprietaire']) ?>" style="width:100px;height:100px;border-radius:50%;object-fit:cover;" class="mb-2">
+            <?php endif; ?>
+            <input type="file" class="form-control" name="photo_proprietaire" accept=".jpg,.jpeg,.png,.webp">
+        </div>
+    </div>
+</div>
 
     <div class="card mb-3">
         <div class="card-header">Règles de réservation & acompte</div>

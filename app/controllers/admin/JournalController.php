@@ -1,8 +1,9 @@
 <?php
 
-class JournalController extends Controller {
-
-    public function index() {
+class JournalController extends Controller
+{
+    public function index()
+    {
         $this->requireAnyRole(['ADMIN', 'SERVEUR']);
 
         $commandeModel = new Commande();
@@ -26,7 +27,8 @@ class JournalController extends Controller {
         ]);
     }
 
-    public function store() {
+    public function store()
+    {
         $this->requireAnyRole(['ADMIN', 'SERVEUR']);
         header('Content-Type: application/json');
 
@@ -52,7 +54,9 @@ class JournalController extends Controller {
             $platId = (int) $platId;
             $quantite = max(1, (int) ($quantites[$i] ?? 1));
             $plat = $platModel->find($platId);
-            if (!$plat) continue;
+            if (!$plat) {
+                continue;
+            }
 
             $lignes[$platId] = ['nom' => $plat['nom'], 'prix' => $plat['prix'], 'quantite' => $quantite];
             $total += $plat['prix'] * $quantite;

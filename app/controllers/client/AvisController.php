@@ -1,8 +1,9 @@
 <?php
 
-class AvisController extends Controller {
-
-    public function index() {
+class AvisController extends Controller
+{
+    public function index()
+    {
         $avisModel = new Avis();
         $parametreModel = new Parametre();
 
@@ -17,7 +18,8 @@ class AvisController extends Controller {
         ]);
     }
 
-    public function store() {
+    public function store()
+    {
         header('Content-Type: application/json');
 
         $nom = trim($_POST['nom'] ?? '');
@@ -64,12 +66,13 @@ class AvisController extends Controller {
 
         echo json_encode(['success' => true, 'message' => 'Merci pour votre avis !']);
     }
-    public function apiAvisRecents() {
-    header('Content-Type: application/json');
+    public function apiAvisRecents()
+    {
+        header('Content-Type: application/json');
 
-    $avisModel = new Avis();
-    $avis = $avisModel->publiesAvecUser(6);
+        $avisModel = new Avis();
+        $avis = $avisModel->publiesAvecUser(6);
 
-    echo json_encode($avis);
-}
+        echo json_encode($avis);
+    }
 }

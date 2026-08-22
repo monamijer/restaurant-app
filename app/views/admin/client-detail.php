@@ -1,4 +1,5 @@
-<?php $titrePage = 'Détail client'; $page = 'clients'; ?>
+<?php $titrePage = 'Détail client';
+$page = 'clients'; ?>
 <?php require __DIR__ . '/../partials/header-admin.php'; ?>
 
 <a href="/admin/clients" class="btn btn-sm btn-outline-secondary mb-3">← Retour aux clients</a>

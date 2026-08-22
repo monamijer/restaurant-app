@@ -1,4 +1,5 @@
-<?php $titrePage = 'Dashboard'; $page = 'dashboard'; ?>
+<?php $titrePage = 'Dashboard';
+$page = 'dashboard'; ?>
 <?php require __DIR__ . '/../partials/header-admin.php'; ?>
 
 <h2 class="font-title mb-4">📊 Tableau de bord</h2>

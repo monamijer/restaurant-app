@@ -1,8 +1,9 @@
 <?php
 
-class MenuAdminController extends Controller {
-
-    public function index() {
+class MenuAdminController extends Controller
+{
+    public function index()
+    {
         $this->requireRole('ADMIN');
 
         $platModel = new Plat();
@@ -15,7 +16,8 @@ class MenuAdminController extends Controller {
         $this->render('admin/menu', ['plats' => $plats, 'categories' => $categories, 'devise' => $parametreModel->get('devise', 'BIF')]);
     }
 
-    public function store() {
+    public function store()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -40,7 +42,8 @@ class MenuAdminController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Plat ajouté', 'id' => $id]);
     }
 
-    public function update() {
+    public function update()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -71,7 +74,8 @@ class MenuAdminController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Plat mis à jour']);
     }
 
-    public function delete() {
+    public function delete()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -90,7 +94,8 @@ class MenuAdminController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Plat supprimé']);
     }
 
-    public function toggleDisponibilite() {
+    public function toggleDisponibilite()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -103,7 +108,8 @@ class MenuAdminController extends Controller {
         echo json_encode(['success' => true]);
     }
 
-    private function validerDonnees(): array {
+    private function validerDonnees(): array
+    {
         $nom = trim($_POST['nom'] ?? '');
         $prix = $_POST['prix'] ?? '';
         $categorieId = $_POST['categorie_id'] ?? '';
@@ -127,7 +133,8 @@ class MenuAdminController extends Controller {
         ];
     }
 
-    private function uploaderImage(array $fichier): array {
+    private function uploaderImage(array $fichier): array
+    {
         $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'webp'];
         $tailleMax = 3 * 1024 * 1024; // 3 Mo
 

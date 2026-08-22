@@ -1,9 +1,11 @@
 <?php
 
-class Commande extends Model {
+class Commande extends Model
+{
     protected string $table = 'commandes';
 
-    public function caPeriode(string $debut, string $fin): float {
+    public function caPeriode(string $debut, string $fin): float
+    {
         $sql = "SELECT COALESCE(SUM(total), 0) AS ca FROM commandes 
                 WHERE created_at BETWEEN ? AND ? AND statut != 'ANNULEE'";
         $stmt = $this->db->prepare($sql);
@@ -11,7 +13,8 @@ class Commande extends Model {
         return (float) $stmt->fetch()['ca'];
     }
 
-    public function nombrePeriode(string $debut, string $fin): int {
+    public function nombrePeriode(string $debut, string $fin): int
+    {
         $sql = "SELECT COUNT(*) AS total FROM commandes 
                 WHERE created_at BETWEEN ? AND ? AND statut != 'ANNULEE'";
         $stmt = $this->db->prepare($sql);
@@ -19,7 +22,8 @@ class Commande extends Model {
         return (int) $stmt->fetch()['total'];
     }
 
-    public function platsPopulaires(int $limite = 5): array {
+    public function platsPopulaires(int $limite = 5): array
+    {
         $sql = "SELECT p.nom, SUM(lc.quantite) AS total_vendu
                 FROM lignes_commande lc
                 JOIN plats p ON lc.plat_id = p.id
@@ -34,7 +38,8 @@ class Commande extends Model {
         return $stmt->fetchAll();
     }
 
-    public function repartitionParHeure(): array {
+    public function repartitionParHeure(): array
+    {
         $sql = "SELECT HOUR(created_at) AS heure, COUNT(*) AS total
                 FROM commandes
                 WHERE statut != 'ANNULEE'
@@ -43,7 +48,8 @@ class Commande extends Model {
         return $this->db->query($sql)->fetchAll();
     }
 
-    public function caParJour(int $nbJours = 7): array {
+    public function caParJour(int $nbJours = 7): array
+    {
         $sql = "SELECT DATE(created_at) AS jour, COALESCE(SUM(total), 0) AS ca
                 FROM commandes
                 WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL ? DAY)
@@ -55,89 +61,94 @@ class Commande extends Model {
         $stmt->execute();
         return $stmt->fetchAll();
     }
-    public function creerAvecLignes(array $donneesCommande, array $panier): int {
-    $this->db->beginTransaction();
-    try {
-        $commandeId = $this->create($donneesCommande);
+    public function creerAvecLignes(array $donneesCommande, array $panier): int
+    {
+        $this->db->beginTransaction();
+        try {
+            $commandeId = $this->create($donneesCommande);
 
-        $ligneModel = new LigneCommande();
-        foreach ($panier as $platId => $item) {
-            $ligneModel->create([
-                'commande_id' => $commandeId,
-                'plat_id' => $platId,
-                'quantite' => $item['quantite'],
-                'prix_unitaire' => $item['prix'],
-            ]);
+            $ligneModel = new LigneCommande();
+            foreach ($panier as $platId => $item) {
+                $ligneModel->create([
+                    'commande_id' => $commandeId,
+                    'plat_id' => $platId,
+                    'quantite' => $item['quantite'],
+                    'prix_unitaire' => $item['prix'],
+                ]);
+            }
+
+            $this->db->commit();
+            return $commandeId;
+        } catch (\Exception $e) {
+            $this->db->rollBack();
+            throw $e;
         }
-
-        $this->db->commit();
-        return $commandeId;
-    } catch (\Exception $e) {
-        $this->db->rollBack();
-        throw $e;
     }
-}
 
-public function findAvecUser(int $id): ?array {
-    $sql = "SELECT c.*, 
+    public function findAvecUser(int $id): ?array
+    {
+        $sql = 'SELECT c.*, 
                 COALESCE(u.nom, c.guest_nom) AS user_nom,
                 COALESCE(u.email, c.guest_email) AS email,
                 COALESCE(u.telephone, c.guest_telephone) AS telephone
             FROM commandes c
             LEFT JOIN users u ON c.user_id = u.id
-            WHERE c.id = ?";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute([$id]);
-    return $stmt->fetch() ?: null;
-}
+            WHERE c.id = ?';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetch() ?: null;
+    }
 
-public function toutesAvecUser(?string $statut = null): array {
-    $sql = "SELECT c.*, 
+    public function toutesAvecUser(?string $statut = null): array
+    {
+        $sql = 'SELECT c.*, 
                 COALESCE(u.nom, c.guest_nom) AS user_nom,
                 COALESCE(u.email, c.guest_email) AS email,
                 COALESCE(u.telephone, c.guest_telephone) AS telephone
             FROM commandes c
-            LEFT JOIN users u ON c.user_id = u.id";
-    $params = [];
-    if ($statut) {
-        $sql .= " WHERE c.statut = ?";
-        $params[] = $statut;
+            LEFT JOIN users u ON c.user_id = u.id';
+        $params = [];
+        if ($statut) {
+            $sql .= ' WHERE c.statut = ?';
+            $params[] = $statut;
+        }
+        $sql .= ' ORDER BY c.created_at DESC';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
     }
-    $sql .= " ORDER BY c.created_at DESC";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute($params);
-    return $stmt->fetchAll();
-}
-public function journalDuJour(?int $userId = null): array {
-    $sql = "SELECT c.*, u.nom AS saisie_par_nom
+    public function journalDuJour(?int $userId = null): array
+    {
+        $sql = 'SELECT c.*, u.nom AS saisie_par_nom
             FROM commandes c
             LEFT JOIN users u ON c.saisie_par_user_id = u.id
             WHERE c.saisie_par_user_id IS NOT NULL
-            AND DATE(c.created_at) = CURDATE()";
-    $params = [];
-    if ($userId) {
-        $sql .= " AND c.saisie_par_user_id = ?";
-        $params[] = $userId;
+            AND DATE(c.created_at) = CURDATE()';
+        $params = [];
+        if ($userId) {
+            $sql .= ' AND c.saisie_par_user_id = ?';
+            $params[] = $userId;
+        }
+        $sql .= ' ORDER BY c.created_at DESC';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
     }
-    $sql .= " ORDER BY c.created_at DESC";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute($params);
-    return $stmt->fetchAll();
-}
 
-public function totalParModePaiementJour(?int $userId = null): array {
-    $sql = "SELECT mode_paiement, COALESCE(SUM(total), 0) AS total
+    public function totalParModePaiementJour(?int $userId = null): array
+    {
+        $sql = 'SELECT mode_paiement, COALESCE(SUM(total), 0) AS total
             FROM commandes
             WHERE saisie_par_user_id IS NOT NULL
-            AND DATE(created_at) = CURDATE()";
-    $params = [];
-    if ($userId) {
-        $sql .= " AND saisie_par_user_id = ?";
-        $params[] = $userId;
+            AND DATE(created_at) = CURDATE()';
+        $params = [];
+        if ($userId) {
+            $sql .= ' AND saisie_par_user_id = ?';
+            $params[] = $userId;
+        }
+        $sql .= ' GROUP BY mode_paiement';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
     }
-    $sql .= " GROUP BY mode_paiement";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute($params);
-    return $stmt->fetchAll();
-}
 }

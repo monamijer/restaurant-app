@@ -1,20 +1,22 @@
 <?php
 
-class AuthController extends Controller {
-
-    public function loginForm() {
+class AuthController extends Controller
+{
+    public function loginForm()
+    {
         $error = $_SESSION['error'] ?? null;
         $success = $_SESSION['success'] ?? null;
         unset($_SESSION['error'], $_SESSION['success']);
         $this->render('auth/login', ['error' => $error, 'success' => $success]);
     }
 
-    public function login() {
+    public function login()
+    {
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
 
         if (!$email || !$password) {
-            $_SESSION['error'] = "Veuillez remplir tous les champs.";
+            $_SESSION['error'] = 'Veuillez remplir tous les champs.';
             header('Location: /connexion');
             exit;
         }
@@ -29,24 +31,27 @@ class AuthController extends Controller {
             exit;
         }
 
-        $_SESSION['error'] = "Email ou mot de passe incorrect.";
+        $_SESSION['error'] = 'Email ou mot de passe incorrect.';
         header('Location: /connexion');
         exit;
     }
 
-    public function logout() {
+    public function logout()
+    {
         Auth::logout();
         header('Location: /');
         exit;
     }
 
-    public function motDePasseOublieForm() {
+    public function motDePasseOublieForm()
+    {
         $message = $_SESSION['reset_message'] ?? null;
         unset($_SESSION['reset_message']);
         $this->render('auth/mot-de-passe-oublie', ['message' => $message]);
     }
 
-    public function motDePasseOublieEnvoyer() {
+    public function motDePasseOublieEnvoyer()
+    {
         $email = trim($_POST['email'] ?? '');
 
         // Message volontairement identique que le compte existe ou non,
@@ -75,7 +80,8 @@ class AuthController extends Controller {
         exit;
     }
 
-    public function reinitialiserForm() {
+    public function reinitialiserForm()
+    {
         $token = $_GET['token'] ?? '';
 
         $resetModel = new PasswordReset();
@@ -89,7 +95,8 @@ class AuthController extends Controller {
         $this->render('auth/reinitialiser-mot-de-passe', ['token' => $token, 'erreur' => null]);
     }
 
-    public function reinitialiser() {
+    public function reinitialiser()
+    {
         $token = $_POST['token'] ?? '';
         $password = $_POST['password'] ?? '';
 
@@ -97,7 +104,7 @@ class AuthController extends Controller {
         $reset = $resetModel->trouverValide($token);
 
         if (!$reset) {
-            $_SESSION['error'] = "Ce lien est invalide ou a expiré.";
+            $_SESSION['error'] = 'Ce lien est invalide ou a expiré.';
             header('Location: /connexion');
             exit;
         }
@@ -116,7 +123,7 @@ class AuthController extends Controller {
 
         $resetModel->marquerUtilise($reset['id']);
 
-        $_SESSION['success'] = "Mot de passe réinitialisé. Vous pouvez vous connecter.";
+        $_SESSION['success'] = 'Mot de passe réinitialisé. Vous pouvez vous connecter.';
         header('Location: /connexion');
         exit;
     }

@@ -1,8 +1,9 @@
 <?php
 
-class CommandeController extends Controller {
-
-    public function ajouterPanier() {
+class CommandeController extends Controller
+{
+    public function ajouterPanier()
+    {
         header('Content-Type: application/json');
 
         $platId = (int) ($_POST['plat_id'] ?? 0);
@@ -38,7 +39,8 @@ class CommandeController extends Controller {
         ]);
     }
 
-    public function modifierPanier() {
+    public function modifierPanier()
+    {
         header('Content-Type: application/json');
 
         $platId = (int) ($_POST['plat_id'] ?? 0);
@@ -53,7 +55,8 @@ class CommandeController extends Controller {
         echo json_encode(['success' => true, 'panier' => $this->calculerPanier()]);
     }
 
-    public function voirPanier() {
+    public function voirPanier()
+    {
         $panier = $this->calculerPanier();
         $parametreModel = new Parametre();
         $params = $parametreModel->getAll();
@@ -61,7 +64,8 @@ class CommandeController extends Controller {
         $this->render('client/panier', ['panier' => $panier, 'params' => $params]);
     }
 
-    public function checkout() {
+    public function checkout()
+    {
         header('Content-Type: application/json');
 
         if (empty($_SESSION['panier'])) {
@@ -129,7 +133,8 @@ class CommandeController extends Controller {
         echo json_encode(['success' => true, 'paiement_requis' => true, 'commande_id' => $commandeId]);
     }
 
-    public function creerPaiement() {
+    public function creerPaiement()
+    {
         header('Content-Type: application/json');
         $config = require __DIR__ . '/../../../config/config.php';
         \Stripe\Stripe::setApiKey($config['stripe_secret_key']);
@@ -172,7 +177,8 @@ class CommandeController extends Controller {
         }
     }
 
-    public function paiementManuel() {
+    public function paiementManuel()
+    {
         header('Content-Type: application/json');
 
         $commandeId = (int) ($_POST['commande_id'] ?? 0);
@@ -221,7 +227,8 @@ class CommandeController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Enregistré.']);
     }
 
-    public function suivi() {
+    public function suivi()
+    {
         $id = (int) ($_GET['id'] ?? 0);
         $commandeModel = new Commande();
         $commande = $commandeModel->find($id);
@@ -229,7 +236,8 @@ class CommandeController extends Controller {
         $this->render('client/suivi-commande', ['commande' => $commande]);
     }
 
-    public function statutAjax() {
+    public function statutAjax()
+    {
         header('Content-Type: application/json');
         $id = (int) ($_GET['id'] ?? 0);
 
@@ -239,7 +247,8 @@ class CommandeController extends Controller {
         echo json_encode(['statut' => $commande['statut'] ?? null]);
     }
 
-    private function calculerPanier(): array {
+    private function calculerPanier(): array
+    {
         $panier = $_SESSION['panier'] ?? [];
         $total = 0;
         foreach ($panier as $item) {

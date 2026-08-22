@@ -1,4 +1,5 @@
 <?php
+
 // Routes publiques
 $router->get('/', 'client/HomeController@index');
 $router->get('/menu', 'client/MenuController@index');

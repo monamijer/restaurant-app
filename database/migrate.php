@@ -13,13 +13,13 @@ $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $pass, 
 ]);
 
 // Table qui garde la trace des migrations déjà appliquées
-$pdo->exec("CREATE TABLE IF NOT EXISTS migrations (
+$pdo->exec('CREATE TABLE IF NOT EXISTS migrations (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom_fichier VARCHAR(255) UNIQUE NOT NULL,
     applique_le DATETIME DEFAULT CURRENT_TIMESTAMP
-)");
+)');
 
-$dejaAppliquees = $pdo->query("SELECT nom_fichier FROM migrations")->fetchAll(PDO::FETCH_COLUMN);
+$dejaAppliquees = $pdo->query('SELECT nom_fichier FROM migrations')->fetchAll(PDO::FETCH_COLUMN);
 
 $dossierMigrations = __DIR__ . '/migrations';
 $fichiers = glob($dossierMigrations . '/*.sql');
@@ -39,12 +39,12 @@ foreach ($fichiers as $fichier) {
 
     try {
         $pdo->exec($sql);
-        $stmt = $pdo->prepare("INSERT INTO migrations (nom_fichier) VALUES (?)");
+        $stmt = $pdo->prepare('INSERT INTO migrations (nom_fichier) VALUES (?)');
         $stmt->execute([$nomFichier]);
         $nbAppliquees++;
         echo "  ✅ OK\n";
     } catch (PDOException $e) {
-        echo "  ❌ ERREUR : " . $e->getMessage() . "\n";
+        echo '  ❌ ERREUR : ' . $e->getMessage() . "\n";
         echo "Arrêt des migrations.\n";
         exit(1);
     }

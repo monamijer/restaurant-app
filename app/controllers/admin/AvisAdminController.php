@@ -1,8 +1,9 @@
 <?php
 
-class AvisAdminController extends Controller {
-
-    public function index() {
+class AvisAdminController extends Controller
+{
+    public function index()
+    {
         $this->requireRole('ADMIN');
 
         $avisModel = new Avis();
@@ -11,7 +12,8 @@ class AvisAdminController extends Controller {
         $this->render('admin/avis', ['avis' => $avis]);
     }
 
-    public function repondre() {
+    public function repondre()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -29,7 +31,8 @@ class AvisAdminController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Réponse enregistrée.']);
     }
 
-    public function delete() {
+    public function delete()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 

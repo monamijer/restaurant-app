@@ -1,8 +1,9 @@
 <?php
 
-class CommandeAdminController extends Controller {
-
-    public function index() {
+class CommandeAdminController extends Controller
+{
+    public function index()
+    {
         $this->requireAnyRole(['ADMIN', 'SERVEUR', 'CUISINE']);
 
         $commandeModel = new Commande();
@@ -17,7 +18,8 @@ class CommandeAdminController extends Controller {
         $this->render('admin/commandes', ['commandes' => $commandes, 'devise' => $parametreModel->get('devise', 'BIF')]);
     }
 
-    public function changerStatut() {
+    public function changerStatut()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -36,7 +38,8 @@ class CommandeAdminController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Statut mis à jour.']);
     }
 
-    public function confirmerPaiement() {
+    public function confirmerPaiement()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -47,7 +50,8 @@ class CommandeAdminController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Paiement confirmé.']);
     }
 
-    public function listeAjax() {
+    public function listeAjax()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 

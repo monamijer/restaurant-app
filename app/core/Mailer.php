@@ -1,7 +1,9 @@
 <?php
 
-class Mailer {
-    private static function envoyer(string $destinataire, string $nomDestinataire, string $sujet, string $htmlContenu): bool {
+class Mailer
+{
+    private static function envoyer(string $destinataire, string $nomDestinataire, string $sujet, string $htmlContenu): bool
+    {
         $config = require __DIR__ . '/../../config/config.php';
         $apiKey = $config['brevo_api_key'];
 
@@ -36,7 +38,8 @@ class Mailer {
         return true;
     }
 
-    public static function notifierAdminPaiementManuel(string $type, array $details, string $emailAdmin): void {
+    public static function notifierAdminPaiementManuel(string $type, array $details, string $emailAdmin): void
+    {
         $sujet = "Nouvelle demande de paiement à traiter — $type";
         $html = "
             <h3>Nouvelle demande nécessitant votre attention</h3>
@@ -44,51 +47,53 @@ class Mailer {
             <p><strong>Client :</strong> {$details['nom']}</p>
             <p><strong>Téléphone :</strong> {$details['telephone']}</p>
             <p><strong>Méthode :</strong> {$details['mode_paiement']}</p>
-            " . (!empty($details['reference']) ? "<p><strong>Référence :</strong> {$details['reference']}</p>" : "") . "
+            " . (!empty($details['reference']) ? "<p><strong>Référence :</strong> {$details['reference']}</p>" : '') . "
             <p><strong>Détail :</strong> {$details['description']}</p>
             <p>Connectez-vous à l'espace admin pour confirmer.</p>
         ";
         self::envoyer($emailAdmin, 'Admin', $sujet, $html);
     }
 
-    public static function confirmerDemandeClient(string $emailClient, string $nomClient, string $sujet, string $message): void {
+    public static function confirmerDemandeClient(string $emailClient, string $nomClient, string $sujet, string $message): void
+    {
         $html = "<p>Bonjour $nomClient,</p><p>$message</p>";
         self::envoyer($emailClient, $nomClient, $sujet, $html);
     }
     // ⚠️ MODE_SIMULATION_TEMPORAIRE — À RETIRER dès que Brevo est configuré (clé API + expéditeur vérifié)
-public static function envoyerCodeVerification(string $email, string $code): bool {
-    $config = require __DIR__ . '/../../config/config.php';
+    public static function envoyerCodeVerification(string $email, string $code): bool
+    {
+        $config = require __DIR__ . '/../../config/config.php';
 
-    if (empty($config['brevo_api_key'])) {
-        error_log("⚠️ SIMULATION — Code de vérification pour $email : $code");
-        return true; // on fait comme si l'envoi avait réussi
-    }
-    // ⚠️ FIN MODE_SIMULATION_TEMPORAIRE
+        if (empty($config['brevo_api_key'])) {
+            error_log("⚠️ SIMULATION — Code de vérification pour $email : $code");
+            return true; // on fait comme si l'envoi avait réussi
+        }
+        // ⚠️ FIN MODE_SIMULATION_TEMPORAIRE
 
-    $html = "
+        $html = "
         <p>Voici votre code de vérification :</p>
         <h2 style='letter-spacing: 4px;'>$code</h2>
         <p>Ce code est valable 15 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.</p>
     ";
-    return self::envoyer($email, '', 'Votre code de vérification', $html);
-}
-// ⚠️ MODE_SIMULATION_TEMPORAIRE — À RETIRER dès que Brevo est configuré
-public static function envoyerLienReinitialisation(string $email, string $lien): bool {
-    $config = require __DIR__ . '/../../config/config.php';
-
-    if (empty($config['brevo_api_key'])) {
-        error_log("⚠️ SIMULATION — Lien de réinitialisation pour $email : $lien");
-        return true;
+        return self::envoyer($email, '', 'Votre code de vérification', $html);
     }
-    // ⚠️ FIN MODE_SIMULATION_TEMPORAIRE
+    // ⚠️ MODE_SIMULATION_TEMPORAIRE — À RETIRER dès que Brevo est configuré
+    public static function envoyerLienReinitialisation(string $email, string $lien): bool
+    {
+        $config = require __DIR__ . '/../../config/config.php';
 
-    $html = "
+        if (empty($config['brevo_api_key'])) {
+            error_log("⚠️ SIMULATION — Lien de réinitialisation pour $email : $lien");
+            return true;
+        }
+        // ⚠️ FIN MODE_SIMULATION_TEMPORAIRE
+
+        $html = "
         <p>Vous avez demandé à réinitialiser votre mot de passe.</p>
         <p><a href='$lien' style='background:#b8894f;color:#fff;padding:10px 20px;text-decoration:none;border-radius:4px;'>Réinitialiser mon mot de passe</a></p>
         <p>Ce lien est valable 30 minutes et ne peut être utilisé qu'une seule fois. Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.</p>
     ";
-    return self::envoyer($email, '', 'Réinitialisation de votre mot de passe', $html);
-}
-
+        return self::envoyer($email, '', 'Réinitialisation de votre mot de passe', $html);
+    }
 
 }

@@ -1,17 +1,19 @@
 <?php
 
-class ReservationAdminController extends Controller {
-
-    public function index() {
-       $this->requireAnyRole(['ADMIN', 'SERVEUR']);
+class ReservationAdminController extends Controller
+{
+    public function index()
+    {
+        $this->requireAnyRole(['ADMIN', 'SERVEUR']);
 
         $reservationModel = new Reservation();
         $reservations = $reservationModel->toutesAvecDetails();
-$parametreModel = new Parametre();
-$this->render('admin/reservations', ['reservations' => $reservations, 'devise' => $parametreModel->get('devise', 'BIF')]);
+        $parametreModel = new Parametre();
+        $this->render('admin/reservations', ['reservations' => $reservations, 'devise' => $parametreModel->get('devise', 'BIF')]);
     }
 
-    public function changerStatut() {
+    public function changerStatut()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -35,7 +37,8 @@ $this->render('admin/reservations', ['reservations' => $reservations, 'devise' =
         echo json_encode(['success' => true, 'message' => 'Statut mis à jour.']);
     }
 
-    public function confirmerPaiement() {
+    public function confirmerPaiement()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 

@@ -1,8 +1,9 @@
 <?php
 
-class DashboardController extends Controller {
-
-    public function index() {
+class DashboardController extends Controller
+{
+    public function index()
+    {
         $this->requireRole('ADMIN');
 
         $commandeModel = new Commande();
@@ -37,7 +38,8 @@ class DashboardController extends Controller {
         $this->render('admin/dashboard', ['stats' => $stats, 'devise' => $parametreModel->get('devise', 'BIF')]);
     }
 
-    public function refreshStats() {
+    public function refreshStats()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 

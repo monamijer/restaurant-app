@@ -1,8 +1,9 @@
 <?php
 
-class DepenseController extends Controller {
-
-    public function index() {
+class DepenseController extends Controller
+{
+    public function index()
+    {
         $this->requireRole('ADMIN');
 
         $mois = $_GET['mois'] ?? date('Y-m');
@@ -28,7 +29,8 @@ class DepenseController extends Controller {
         ]);
     }
 
-    public function store() {
+    public function store()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -46,7 +48,8 @@ class DepenseController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Dépense enregistrée.']);
     }
 
-    public function update() {
+    public function update()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -68,7 +71,8 @@ class DepenseController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Dépense mise à jour.']);
     }
 
-    public function delete() {
+    public function delete()
+    {
         $this->requireRole('ADMIN');
         header('Content-Type: application/json');
 
@@ -79,7 +83,8 @@ class DepenseController extends Controller {
         echo json_encode(['success' => true, 'message' => 'Dépense supprimée.']);
     }
 
-    private function validerDonnees(): array {
+    private function validerDonnees(): array
+    {
         $categorieId = (int) ($_POST['categorie_id'] ?? 0);
         $montant = $_POST['montant'] ?? '';
         $description = trim($_POST['description'] ?? '');

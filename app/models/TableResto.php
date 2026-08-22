@@ -1,10 +1,12 @@
 <?php
 
-class TableResto extends Model {
+class TableResto extends Model
+{
     protected string $table = 'tables_resto';
 
     // Trouve une table libre avec assez de capacité pour ce créneau
-    public function trouverTableDisponible(string $dateReservation, int $nbPersonnes): ?array {
+    public function trouverTableDisponible(string $dateReservation, int $nbPersonnes): ?array
+    {
         $sql = "SELECT t.* FROM tables_resto t
                 WHERE t.capacite >= ?
                 AND t.id NOT IN (
