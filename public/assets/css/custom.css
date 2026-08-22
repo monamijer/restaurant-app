@@ -415,3 +415,47 @@ html {
     50% { text-shadow: 0 0 20px rgba(184, 137, 79, 0.4); }
     100% { text-shadow: 0 0 0 transparent; }
 }
+.photo-proprietaire {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid var(--bg-secondary);
+    box-shadow: 0 10px 30px var(--card-shadow);
+    margin: 0 auto;
+    display: block;
+}
+
+.bloc-proprietaire {
+    text-align: center;
+}
+
+.bloc-proprietaire .nom-proprietaire {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    margin-top: 1.5rem;
+}
+
+.bloc-proprietaire .titre-proprietaire {
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+}
+.offcanvas {
+    border-color: var(--border-color) !important;
+}
+
+.offcanvas .nav-link {
+    color: var(--text-primary);
+    padding: 0.75rem 0;
+    font-size: 1.05rem;
+}
+
+.offcanvas .btn-close {
+    filter: var(--btn-close-filter, none);
+}
+
+[data-theme="dark"] .offcanvas .btn-close {
+    filter: invert(1);
+}

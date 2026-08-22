@@ -106,9 +106,31 @@ if ($horaireAujourdhui && !$horaireAujourdhui['ferme']) {
         </div>
     </div>
 </section>
+<?php if (!empty($params['nom_proprietaire'])): ?>
+<section class="section" style="background-color: var(--bg-secondary);">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 bloc-proprietaire animate-on-scroll">
+                <?php if (!empty($params['photo_proprietaire'])): ?>
+                    <img src="/assets/uploads/<?= htmlspecialchars($params['photo_proprietaire']) ?>" class="photo-proprietaire" alt="<?= htmlspecialchars($params['nom_proprietaire']) ?>">
+                <?php else: ?>
+                    <div class="photo-proprietaire img-placeholder-fallback" style="display:flex;align-items:center;justify-content:center;font-size:3rem;">👤</div>
+                <?php endif; ?>
+
+                <div class="titre-proprietaire"><?= htmlspecialchars($params['titre_proprietaire']) ?></div>
+                <div class="nom-proprietaire"><?= htmlspecialchars($params['nom_proprietaire']) ?></div>
+                <?php if (!empty($params['bio_proprietaire'])): ?>
+                    <p style="color: var(--text-secondary);" class="mt-3"><?= htmlspecialchars($params['bio_proprietaire']) ?></p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
 <svg class="wave-divider inverse" viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M0,30 C300,0 900,60 1200,30 L1200,60 L0,60 Z"></path>
 </svg>
+
 <section class="section" id="galerie">
     <div class="container">
         <div class="section-title">
