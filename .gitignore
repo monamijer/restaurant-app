@@ -11,3 +11,4 @@ public/assets/uploads/*
 # Commit your application's lock file https://getcomposer.org/doc/01-basic-usage.md#commit-your-application's-lock-file-to-version-control
 # You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
 composer.lockpublic/assets/uploads/*
+
