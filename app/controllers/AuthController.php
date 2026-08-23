@@ -54,8 +54,6 @@ class AuthController extends Controller
     {
         $email = trim($_POST['email'] ?? '');
 
-        // Message volontairement identique que le compte existe ou non,
-        // pour ne pas révéler quels emails ont un compte (sécurité)
         $messageGenerique = "Si un compte existe avec cet email, un lien de réinitialisation vient d'être envoyé.";
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -71,7 +69,8 @@ class AuthController extends Controller
 
         if ($user && !$resetModel->demandeRecenteExiste($email)) {
             $token = $resetModel->creerToken($email);
-            $lien = 'http://restaurant.local/reinitialiser-mot-de-passe?token=' . $token;
+            $config = require __DIR__ . '/../../config/config.php';
+            $lien = $config['url_site'] . '/reinitialiser-mot-de-passe?token=' . $token;
             Mailer::envoyerLienReinitialisation($email, $lien);
         }
 
