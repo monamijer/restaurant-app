@@ -14,6 +14,9 @@ class Database
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 ]);
+                
+                self::$instance->exec("SET time_zone = '+02:00'");
+
             } catch (PDOException $e) {
                 die('Erreur de connexion à la base de données : ' . $e->getMessage());
             }
