@@ -32,7 +32,6 @@ class ReservationController extends Controller
             return;
         }
 
-        // Sécurité serveur : l'email doit avoir été vérifié il y a moins de 30 minutes
         $verifModel = new VerificationEmail();
         if (!$verifModel->estRecemmentVerifie($email, 'RESERVATION')) {
             echo json_encode(['success' => false, 'message' => 'Veuillez vérifier votre email avant de continuer.']);
@@ -132,6 +131,7 @@ class ReservationController extends Controller
         try {
             $parametreModel = new Parametre();
             $config['stripe_devise'] = $parametreModel->get('devise_stripe', 'usd');
+
             $session = \Stripe\Checkout\Session::create([
                 'payment_method_types' => ['card'],
                 'line_items' => [[
@@ -143,8 +143,8 @@ class ReservationController extends Controller
                     'quantity' => 1,
                 ]],
                 'mode' => 'payment',
-                'success_url' => 'http://restaurant.local/reservation/confirmation?id=' . $reservationId,
-                'cancel_url' => 'http://restaurant.local/reserver',
+                'success_url' => $config['url_site'] . '/reservation/confirmation?id=' . $reservationId,
+                'cancel_url' => $config['url_site'] . '/reserver',
                 'metadata' => ['type' => 'reservation', 'reservation_id' => $reservationId],
             ]);
 

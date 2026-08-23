@@ -165,8 +165,8 @@ class CommandeController extends Controller
                     'quantity' => 1,
                 ]],
                 'mode' => 'payment',
-                'success_url' => 'http://restaurant.local/commande/suivi?id=' . $commandeId,
-                'cancel_url' => 'http://restaurant.local/panier',
+                'success_url' => $config['url_site'] . '/commande/suivi?id=' . $commandeId,
+                'cancel_url' => $config['url_site'] . '/panier',
                 'metadata' => ['type' => 'commande', 'commande_id' => $commandeId],
             ]);
 
