@@ -10,6 +10,7 @@
         <?php else: ?>
             <p style="color: var(--text-secondary);" class="mb-3">Entrez votre email, un lien de réinitialisation vous sera envoyé.</p>
             <form method="POST" action="/mot-de-passe-oublie">
+                <input type="hidden" name="csrf_token" value="<?= Csrf::token() ?>">
                 <div class="mb-3">
                     <label class="form-label">Email</label>
                     <input type="email" name="email" class="form-control" required>

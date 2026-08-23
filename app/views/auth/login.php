@@ -11,8 +11,8 @@
         <?php if (!empty($success)): ?>
         <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
         <?php endif; ?>
-
         <form method="POST" action="/connexion">
+         <input type="hidden" name="csrf_token" value="<?= Csrf::token() ?>">
             <div class="mb-3">
                 <label class="form-label">Email</label>
                 <input type="email" name="email" class="form-control" required>
