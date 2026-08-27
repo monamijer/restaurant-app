@@ -12,6 +12,11 @@ class Mailer
             return false;
         }
 
+        if (empty($config['brevo_sender_email'])) {
+            error_log("Brevo sender email manquant dans .env — email non envoyé à $destinataire");
+            return false;
+        }
+
         $ch = curl_init('https://api.brevo.com/v3/smtp/email');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
@@ -21,7 +26,7 @@ class Mailer
             'content-type: application/json',
         ]);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
-            'sender' => ['name' => 'Etoile d\'Or', 'email' => 'noreply@etoiledor.com'],
+            'sender' => ['name' => $config['brevo_sender_name'], 'email' => $config['brevo_sender_email']],
             'to' => [['email' => $destinataire, 'name' => $nomDestinataire]],
             'subject' => $sujet,
             'htmlContent' => $htmlContenu,
@@ -59,7 +64,7 @@ class Mailer
         $html = "<p>Bonjour $nomClient,</p><p>$message</p>";
         self::envoyer($emailClient, $nomClient, $sujet, $html);
     }
-     
+
     public static function envoyerCodeVerification(string $email, string $code): bool
     {
         $html = "
@@ -69,10 +74,9 @@ class Mailer
     ";
         return self::envoyer($email, '', 'Votre code de vérification', $html);
     }
-     
+
     public static function envoyerLienReinitialisation(string $email, string $lien): bool
     {
-
         $html = "
         <p>Vous avez demandé à réinitialiser votre mot de passe.</p>
         <p><a href='$lien' style='background:#b8894f;color:#fff;padding:10px 20px;text-decoration:none;border-radius:4px;'>Réinitialiser mon mot de passe</a></p>
@@ -80,5 +84,4 @@ class Mailer
     ";
         return self::envoyer($email, '', 'Réinitialisation de votre mot de passe', $html);
     }
-
 }
