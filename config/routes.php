@@ -94,3 +94,9 @@ $router->get('/mot-de-passe-oublie', 'AuthController@motDePasseOublieForm');
 $router->post('/mot-de-passe-oublie', 'AuthController@motDePasseOublieEnvoyer');
 $router->get('/reinitialiser-mot-de-passe', 'AuthController@reinitialiserForm');
 $router->post('/reinitialiser-mot-de-passe', 'AuthController@reinitialiser');
+
+
+$router->get('/admin/horaires', 'admin/HoraireController@index');
+$router->post('/admin/horaires/update', 'admin/HoraireController@mettreAJour');
+$router->post('/admin/horaires/fermeture/ajouter', 'admin/HoraireController@ajouterFermeture');
+$router->post('/admin/horaires/fermeture/supprimer', 'admin/HoraireController@supprimerFermeture');

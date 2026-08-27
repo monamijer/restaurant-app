@@ -11,4 +11,10 @@ class Fermeture extends Model
         $stmt->execute([$date]);
         return (int) $stmt->fetch()['total'] > 0;
     }
+
+    public function aVenir(): array
+    {
+        $sql = 'SELECT * FROM fermetures WHERE date_fin >= NOW() ORDER BY date_debut ASC';
+        return $this->db->query($sql)->fetchAll();
+    }
 }

@@ -40,6 +40,7 @@
         <a href="/admin" class="<?= ($page ?? '') === 'dashboard' ? 'active' : '' ?>">📊 Dashboard</a>
         <a href="/admin/menu" class="<?= ($page ?? '') === 'menu' ? 'active' : '' ?>">🍽️ Menu</a>
         <a href="/admin/categories" class="<?= ($page ?? '') === 'categories' ? 'active' : '' ?>">🏷️ Catégories</a>
+        <a href="/admin/horaires" class="<?= ($page ?? '') === 'horaires' ? 'active' : '' ?>">🕐 Horaires</a>
     <?php endif; ?>
 
     <?php if (in_array(Auth::role(), ['ADMIN', 'SERVEUR'])): ?>
