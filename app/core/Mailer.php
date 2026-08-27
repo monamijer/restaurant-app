@@ -59,17 +59,9 @@ class Mailer
         $html = "<p>Bonjour $nomClient,</p><p>$message</p>";
         self::envoyer($emailClient, $nomClient, $sujet, $html);
     }
-    // ⚠️ MODE_SIMULATION_TEMPORAIRE — À RETIRER dès que Brevo est configuré (clé API + expéditeur vérifié)
+     
     public static function envoyerCodeVerification(string $email, string $code): bool
     {
-        $config = require __DIR__ . '/../../config/config.php';
-
-        if (empty($config['brevo_api_key'])) {
-            error_log("⚠️ SIMULATION — Code de vérification pour $email : $code");
-            return true; // on fait comme si l'envoi avait réussi
-        }
-        // ⚠️ FIN MODE_SIMULATION_TEMPORAIRE
-
         $html = "
         <p>Voici votre code de vérification :</p>
         <h2 style='letter-spacing: 4px;'>$code</h2>
@@ -77,16 +69,9 @@ class Mailer
     ";
         return self::envoyer($email, '', 'Votre code de vérification', $html);
     }
-    // ⚠️ MODE_SIMULATION_TEMPORAIRE — À RETIRER dès que Brevo est configuré
+     
     public static function envoyerLienReinitialisation(string $email, string $lien): bool
     {
-        $config = require __DIR__ . '/../../config/config.php';
-
-        if (empty($config['brevo_api_key'])) {
-            error_log("⚠️ SIMULATION — Lien de réinitialisation pour $email : $lien");
-            return true;
-        }
-        // ⚠️ FIN MODE_SIMULATION_TEMPORAIRE
 
         $html = "
         <p>Vous avez demandé à réinitialiser votre mot de passe.</p>
