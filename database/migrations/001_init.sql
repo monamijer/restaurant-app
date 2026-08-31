@@ -1,5 +1,3 @@
-CREATE DATABASE IF NOT EXISTS restaurant_app CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE restaurant_app;
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
