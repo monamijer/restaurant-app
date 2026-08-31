@@ -13,7 +13,7 @@ class VerificationController extends Controller
             echo json_encode(['success' => false, 'message' => 'Email invalide.']);
             return;
         }
-        if (!in_array($type, ['RESERVATION', 'COMMANDE', 'AVIS', 'EMPLOYE'])) {
+        if (!in_array($type, ['RESERVATION', 'COMMANDE', 'AVIS', 'EMPLOYE', 'PROFIL'])) {
             echo json_encode(['success' => false, 'message' => 'Type invalide.']);
             return;
         }
