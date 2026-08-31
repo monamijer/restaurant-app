@@ -60,8 +60,9 @@
         <a href="/admin/employes" class="<?= ($page ?? '') === 'employes' ? 'active' : '' ?>">👥 Employés</a>
         <a href="/admin/parametres" class="<?= ($page ?? '') === 'parametres' ? 'active' : '' ?>">⚙️ Paramètres</a>
     <?php endif; ?>
-
-    <a href="/deconnexion" class="text-danger">🚪 Déconnexion</a>
+    
+<a href="/admin/profil" class="<?= ($page ?? '') === 'profil' ? 'active' : '' ?>">👤 Mon profil</a>
+<a href="/deconnexion" class="text-danger">🚪 Déconnexion</a>
 </nav>
     </aside>
 
