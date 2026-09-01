@@ -38,9 +38,10 @@ class Mailer
         curl_close($ch);
 
         if ($httpCode >= 400) {
-            error_log("Erreur Brevo ($httpCode) : $response");
+            self::$derniereErreur = "HTTP $httpCode : $response";
             return false;
         }
+        self::$derniereErreur = '';
         return true;
     }
 

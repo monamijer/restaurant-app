@@ -24,7 +24,8 @@ class VerificationController extends Controller
         $envoye = Mailer::envoyerCodeVerification($email, $code);
 
         if (!$envoye) {
-            echo json_encode(['success' => false, 'message' => 'Impossible d\'envoyer l\'email. Vérifiez l\'adresse saisie.']);
+            // ⚠️ DEBUG_TEMPORAIRE — à retirer une fois le problème résolu
+            echo json_encode(['success' => false, 'message' => 'DEBUG: ' . Mailer::$derniereErreur]);
             return;
         }
 
