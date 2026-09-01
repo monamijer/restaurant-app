@@ -28,7 +28,6 @@ class VerificationController extends Controller
             return;
         }
 
-        
         echo json_encode(['success' => true, 'message' => 'Code envoyé. Vérifiez votre boîte mail.']);
 
     }

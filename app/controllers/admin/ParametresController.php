@@ -69,7 +69,7 @@ class ParametresController extends Controller
                 if (move_uploaded_file($_FILES['photo_proprietaire']['tmp_name'], $destination)) {
                     $data['photo_proprietaire'] = $nomFichier;
                 } else {
-                    
+
                 }
             }
         }

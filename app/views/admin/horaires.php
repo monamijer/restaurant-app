@@ -1,4 +1,5 @@
-<?php $titrePage = 'Horaires'; $page = 'horaires'; ?>
+<?php $titrePage = 'Horaires';
+$page = 'horaires'; ?>
 <?php require __DIR__ . '/../partials/header-admin.php'; ?>
 
 <h2 class="mb-4">🕐 Horaires d'ouverture</h2>

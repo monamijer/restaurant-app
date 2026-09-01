@@ -2,18 +2,19 @@
 
 class Mailer
 {
+    public static $derniereErreur = '';
+
     private static function envoyer(string $destinataire, string $nomDestinataire, string $sujet, string $htmlContenu): bool
     {
         $config = require __DIR__ . '/../../config/config.php';
         $apiKey = $config['brevo_api_key'];
 
         if (!$apiKey) {
-            error_log("Brevo API key manquante — email non envoyé à $destinataire");
+            self::$derniereErreur = 'Clé API manquante';
             return false;
         }
-
         if (empty($config['brevo_sender_email'])) {
-            error_log("Brevo sender email manquant dans .env — email non envoyé à $destinataire");
+            self::$derniereErreur = 'Sender email manquant';
             return false;
         }
 
