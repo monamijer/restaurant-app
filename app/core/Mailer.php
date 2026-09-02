@@ -2,7 +2,6 @@
 
 class Mailer
 {
-    public static $derniereErreur = '';
 
     private static function envoyer(string $destinataire, string $nomDestinataire, string $sujet, string $htmlContenu): bool
     {
@@ -10,13 +9,13 @@ class Mailer
         $apiKey = $config['brevo_api_key'];
 
         if (!$apiKey) {
-            self::$derniereErreur = 'Clé API manquante';
-            return false;
-        }
-        if (empty($config['brevo_sender_email'])) {
-            self::$derniereErreur = 'Sender email manquant';
-            return false;
-        }
+    error_log("Brevo API key manquante — email non envoyé à $destinataire");
+    return false;
+}
+if (empty($config['brevo_sender_email'])) {
+    error_log("Brevo sender email manquant dans .env — email non envoyé à $destinataire");
+    return false;
+}
 
         $ch = curl_init('https://api.brevo.com/v3/smtp/email');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -38,11 +37,10 @@ class Mailer
        
 
         if ($httpCode >= 400) {
-            self::$derniereErreur = "HTTP $httpCode : $response";
-            return false;
-        }
-        self::$derniereErreur = '';
-        return true;
+    error_log("Erreur Brevo ($httpCode) : $response");
+    return false;
+}
+return true;
     }
 
     public static function notifierAdminPaiementManuel(string $type, array $details, string $emailAdmin): void
